@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   constraints(club_slug: /[a-z0-9\-]+/) do
     get "/:club_slug", to: "races#show", as: :club_race
     get "/:club_slug/admin", to: "races#admin", as: :club_admin
+    patch "/:club_slug/race", to: "races#update", as: :club_race_update
   end
 
   # Defines the root path route ("/")
