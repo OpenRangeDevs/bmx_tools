@@ -11,15 +11,16 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - `@docs/master_task_list.md` - Master project roadmap with 5 phases and technical requirements
 
 ### 🚀 Current Phase Information  
-- `@docs/phases/phase-1-database-models.md` - Detailed current phase tasks and checklist
+- `@docs/phases/phase-2-core-race-interface.md` - Detailed current phase tasks and checklist
 - `@docs/memories.md` - Project procedures, preferences, and development history
 
 ## Key Project Constraints
 - **Technology Stack**: Ruby on Rails 8+, SQLite (NOT PostgreSQL), Hotwire (NOT React), Minitest (NOT RSpec)
-- **Mobile-First**: Touch-optimized UI with 44px+ touch targets
-- **URL Structure**: `bmxtools.com/[club-name]` for club-specific access
-- **Dual Counters**: At Gate (red) and In Staging (orange) with validation rules
-- **Real-time Updates**: Page must refresh as data changes
+- **Mobile-First**: Touch-optimized UI with 44px+ touch targets ✅ IMPLEMENTED
+- **URL Structure**: `bmxtools.com/[club-name]` for club-specific access ✅ IMPLEMENTED  
+- **Dual Counters**: At Gate (red) and In Staging (orange) with validation rules ✅ IMPLEMENTED
+- **Real-time Updates**: Page must refresh as data changes (Stimulus controllers in progress)
+- **Stimulus Controllers**: Use Stimulus for JavaScript behavior, NOT inline scripts
 
 ## Development Process Requirements
 
@@ -29,6 +30,7 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 2. **Update @docs/memories.md** with any new procedures or preferences specified by the user
 3. **Update phase documentation** in real-time as tasks are completed
 4. **Update master task list** when phases or requirements change
+5. **Context7 Integration**: Always use Context7 MCP server to retrieve current documentation when starting sessions
 
 ### Phase-by-Phase Development
 1. Complete current phase tasks from `@docs/phases/phase-[n]-[title].md`
@@ -45,9 +47,9 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - Test data must reflect authentic BMX racing scenarios (gate numbers, moto progression, etc.)
 
 ## Current Status
-- **Phase**: 1 - Database & Models Setup
-- **Branch**: `phase-1-database-models` (to be created)
-- **Next Milestone**: Complete Club, Race, and RaceSettings models with validations
+- **Phase**: 2 - Core Race Tracking Interface
+- **Branch**: `phase-2-core-race-interface`
+- **Next Milestone**: Complete mobile-first UI with dual counters and Hotwire integration
 
 ## Key Business Rules
 1. **At Gate Counter**: min 0, must be < In Staging
@@ -63,4 +65,5 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 
 ---
 **Last Updated**: 2025-07-24  
-**Current Phase**: Phase 1 - Database & Models Setup
+**Current Phase**: Phase 2 - Core Race Tracking Interface
+**Phase 1**: ✅ COMPLETE (29 tests passing, merged to main)
