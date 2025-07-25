@@ -1,2 +1,5 @@
 tmp/*
 log/*
+
+# TailwindCSS build output
+app/assets/builds/
