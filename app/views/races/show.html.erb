@@ -1,0 +1,59 @@
+<% content_for :title, "#{@club.name} - BMX Race Tracker" %>
+
+<%= turbo_stream_from "club_#{@club.slug}" %>
+
+<div class="space-y-4">
+  <!-- Club Header -->
+  <div class="text-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-2"><%= @club.name %></h1>
+    <p class="text-gray-600">Race Day Progress</p>
+  </div>
+
+  <!-- Race Display (updates via Turbo Stream) -->
+  <div id="race-display">
+    <%= render "race_display", race: @race, club: @club %>
+  </div>
+
+  <!-- Race Times (if set) -->
+  <% if @race_setting.registration_deadline || @race_setting.race_start_time %>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+      <h3 class="font-semibold text-blue-800 mb-2">📅 Race Schedule</h3>
+      <div class="space-y-1 text-blue-700">
+        <% if @race_setting.registration_deadline %>
+          <p><strong>Registration Deadline:</strong> <%= @race_setting.registration_deadline.strftime("%I:%M %p") %></p>
+        <% end %>
+        <% if @race_setting.race_start_time %>
+          <p><strong>Racing Starts:</strong> <%= @race_setting.race_start_time.strftime("%I:%M %p") %></p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Active Notification -->
+  <% if @race_setting.notification_active? %>
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          📢
+        </div>
+        <div class="ml-3">
+          <p class="text-yellow-800 font-semibold">Race Official Announcement</p>
+          <p class="text-yellow-700 mt-1"><%= @race_setting.notification_message %></p>
+          <% if @race_setting.notification_expires_at %>
+            <p class="text-xs text-yellow-600 mt-2">
+              Expires: <%= @race_setting.notification_expires_at.strftime("%I:%M %p") %>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Admin Link -->
+  <div class="text-center mt-8">
+    <%= link_to "Race Official Controls", club_admin_path(@club.slug), 
+                class: "inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg",
+                style: "min-height: 44px; min-width: 44px; touch-action: manipulation;" %>
+  </div>
+</div>
+
