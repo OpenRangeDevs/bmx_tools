@@ -10,13 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_24_165513) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_25_000001) do
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_clubs_on_slug", unique: true
+  end
+
+  create_table "race_activities", force: :cascade do |t|
+    t.integer "race_id"
+    t.integer "club_id", null: false
+    t.string "activity_type", null: false
+    t.text "message", null: false
+    t.json "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_type"], name: "index_race_activities_on_activity_type"
+    t.index ["club_id", "created_at"], name: "index_race_activities_on_club_id_and_created_at"
+    t.index ["club_id"], name: "index_race_activities_on_club_id"
+    t.index ["race_id"], name: "index_race_activities_on_race_id"
   end
 
   create_table "race_settings", force: :cascade do |t|
@@ -40,6 +54,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_24_165513) do
     t.index ["club_id"], name: "index_races_on_club_id"
   end
 
+  add_foreign_key "race_activities", "clubs"
+  add_foreign_key "race_activities", "races"
   add_foreign_key "race_settings", "races"
   add_foreign_key "races", "clubs"
 end

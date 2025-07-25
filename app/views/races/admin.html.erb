@@ -1,6 +1,7 @@
 <% content_for :title, "#{@club.name} - Race Official Controls" %>
 
 <%= turbo_stream_from "club_#{@club.slug}_admin" %>
+<%= render "shared/connection_status" %>
 
 <div class="space-y-6" data-controller="counter">
   <!-- Header -->
@@ -25,10 +26,31 @@
     <%= render "admin_counters", race: @race, club: @club %>
   </div>
 
-  <!-- Live Notifications -->
+  <!-- Enhanced Live Activity Feed -->
+  <%= turbo_stream_from "club_#{@club.slug}_admin_activity" %>
   <div id="notifications-panel" class="bg-green-50 border border-green-300 rounded-lg p-5">
-    <h3 class="font-semibold text-green-800 mb-3 text-center">📡 Live Activity</h3>
-    <div id="live-notifications" class="space-y-2">
+    <h3 class="font-semibold text-green-800 mb-3 text-center">
+      📡 Live Activity 
+      <span id="activity-count" class="ml-2 px-2 py-1 bg-green-200 rounded-full text-xs">
+        <%= @club.race_activities.recent.count %>
+      </span>
+    </h3>
+    
+    <!-- Real-time activity feed -->
+    <div id="activity-feed" class="space-y-2 max-h-48 overflow-y-auto">
+      <% @club.race_activities.recent.each do |activity| %>
+        <%= render "activity_item", activity: activity %>
+      <% end %>
+      
+      <% if @club.race_activities.recent.empty? %>
+        <div class="text-center text-gray-500 text-sm py-4">
+          No recent activity
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Legacy live notifications for backward compatibility -->
+    <div id="live-notifications" class="mt-4 pt-4 border-t border-green-200">
       <%= render "live_notifications", club: @club %>
     </div>
   </div>

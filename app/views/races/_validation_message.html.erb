@@ -1,0 +1,12 @@
+<% if race.at_gate > race.in_staging %>
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 animate-pulse">
+    ⚠️ At Gate cannot be greater than In Staging
+    <div class="text-sm mt-1">
+      Current: At Gate = <%= race.at_gate %>, In Staging = <%= race.in_staging %>
+    </div>
+  </div>
+<% elsif race.at_gate == race.in_staging && race.at_gate > 0 %>
+  <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+    ℹ️ All riders are at the gate - ready to race!
+  </div>
+<% end %>

@@ -1,6 +1,7 @@
 <% content_for :title, "#{@club.name} - BMX Race Tracker" %>
 
 <%= turbo_stream_from "club_#{@club.slug}" %>
+<%= render "shared/connection_status" %>
 
 <div class="space-y-4">
   <!-- Club Header -->
@@ -14,18 +15,58 @@
     <%= render "race_display", race: @race, club: @club %>
   </div>
 
-  <!-- Race Times (if set) -->
+  <!-- Enhanced Race Times with Countdown Timers -->
   <% if @race_setting.registration_deadline || @race_setting.race_start_time %>
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-      <h3 class="font-semibold text-blue-800 mb-2">📅 Race Schedule</h3>
-      <div class="space-y-1 text-blue-700">
-        <% if @race_setting.registration_deadline %>
-          <p><strong>Registration Deadline:</strong> <%= @race_setting.registration_deadline.strftime("%I:%M %p") %></p>
-        <% end %>
-        <% if @race_setting.race_start_time %>
-          <p><strong>Racing Starts:</strong> <%= @race_setting.race_start_time.strftime("%I:%M %p") %></p>
-        <% end %>
-      </div>
+    <div class="space-y-4">
+      <!-- Registration Deadline -->
+      <% if @race_setting.registration_deadline %>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h3 class="font-semibold text-blue-800 mb-3 text-center">📝 Registration Deadline</h3>
+          <div class="text-center text-blue-700 mb-2">
+            <div class="text-sm"><%= @race_setting.registration_deadline.strftime("%I:%M %p") %></div>
+          </div>
+          
+          <% if @race_setting.registration_deadline > Time.current %>
+            <div data-controller="countdown-timer" 
+                 data-countdown-timer-target-time-value="<%= @race_setting.registration_deadline.iso8601 %>"
+                 class="text-center">
+              <div data-countdown-timer-target="display" class="text-3xl font-bold text-blue-600 mb-1">
+                Loading...
+              </div>
+              <div data-countdown-timer-target="label" class="text-sm text-blue-500">
+                Time Remaining to Register
+              </div>
+            </div>
+          <% else %>
+            <div class="text-center text-lg font-bold text-gray-500">Registration Closed</div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- Race Start Time -->
+      <% if @race_setting.race_start_time %>
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <h3 class="font-semibold text-green-800 mb-3 text-center">🏁 Race Start</h3>
+          <div class="text-center text-green-700 mb-2">
+            <div class="text-sm"><%= @race_setting.race_start_time.strftime("%I:%M %p") %></div>
+          </div>
+          
+          <% if @race_setting.race_start_time > Time.current %>
+            <div data-controller="countdown-timer" 
+                 data-countdown-timer-target-time-value="<%= @race_setting.race_start_time.iso8601 %>"
+                 class="text-center">
+              <div data-countdown-timer-target="display" class="text-4xl font-bold text-green-600 mb-1">
+                Loading...
+              </div>
+              <div data-countdown-timer-target="label" class="text-sm text-green-500">
+                Until Racing Begins
+              </div>
+            </div>
+          <% else %>
+            <div class="text-center text-xl font-bold text-red-600">🏁 Racing has begun!</div>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 

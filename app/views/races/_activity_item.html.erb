@@ -1,0 +1,22 @@
+<div class="border-l-4 border-blue-400 pl-3 py-2 text-sm">
+  <div class="flex items-center justify-between">
+    <span class="font-medium text-gray-900">
+      <%= activity.message %>
+    </span>
+    <span class="text-xs text-gray-500">
+      <%= time_ago_in_words(activity.created_at) %> ago
+    </span>
+  </div>
+  
+  <% if activity.metadata.present? && activity.metadata.any? %>
+    <div class="text-xs text-gray-600 mt-1">
+      <% case activity.activity_type %>
+      <% when 'counter_update' %>
+        <%= "At Gate: #{activity.metadata['old_at_gate']}→#{activity.metadata['new_at_gate']}" %>
+        | <%= "In Staging: #{activity.metadata['old_in_staging']}→#{activity.metadata['new_in_staging']}" %>
+      <% when 'reset_performed' %>
+        Reset type: <%= activity.metadata['reset_type']&.humanize %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

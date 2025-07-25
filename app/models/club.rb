@@ -1,5 +1,6 @@
 class Club < ApplicationRecord
   has_many :races, dependent: :destroy
+  has_many :race_activities, dependent: :destroy
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9\-]+\z/, message: "must be URL-friendly (lowercase letters, numbers, and hyphens only)" }
