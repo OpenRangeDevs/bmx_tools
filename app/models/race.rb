@@ -8,6 +8,9 @@ class Race < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+  # Broadcast updates to all connected clients for this club
+  after_update_commit :broadcast_race_update
+
   private
 
   def at_gate_must_be_less_than_staging
@@ -17,5 +20,19 @@ class Race < ApplicationRecord
     if at_gate >= in_staging
       errors.add(:at_gate, "must be less than staging counter")
     end
+  end
+
+  def broadcast_race_update
+    # Broadcast to the club-specific stream (for public display)
+    broadcast_update_to "club_#{club.slug}", 
+                       target: "race-display",
+                       partial: "races/race_display", 
+                       locals: { race: self, club: club }
+                       
+    # Also broadcast to admin pages (for multiple admin users)
+    broadcast_update_to "club_#{club.slug}_admin",
+                       target: "admin-counters",
+                       partial: "races/admin_counters",
+                       locals: { race: self, club: club }
   end
 end
