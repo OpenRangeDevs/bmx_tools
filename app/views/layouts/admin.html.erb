@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin - <%= @club&.name || 'BMX Race Tracker' %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Admin Header -->
+    <header class="bg-blue-600 text-white shadow-sm">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-y-1">
+            <h1 class="text-lg font-semibold"><%= @club&.name %> - Admin</h1>
+            <% if @club %>
+              <%= link_to "View Public Display", club_path(@club), 
+                          class: "ml-3 text-blue-200 hover:text-white text-sm underline" %>
+            <% end %>
+          </div>
+          
+          <div class="flex items-center gap-4">
+            <span class="text-sm text-blue-200">
+              <%= Time.current.strftime('%H:%M') %>
+            </span>
+            <% if session[:admin_authenticated] %>
+              <%= link_to "Logout", club_admin_logout_path(@club), 
+                          method: :delete,
+                          class: "bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded text-sm",
+                          data: { confirm: "Are you sure you want to logout?" } %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <% if flash.any? %>
+      <div class="container mx-auto px-4 mt-4">
+        <% flash.each do |type, message| %>
+          <div class="<%= flash_class(type) %> p-3 rounded-lg mb-4">
+            <%= message %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+      <%= yield %>
+    </main>
+
+    <!-- Admin Footer -->
+    <footer class="mt-auto bg-gray-100 border-t">
+      <div class="container mx-auto px-4 py-3 text-center text-sm text-gray-600">
+        BMX Race Tracker Admin Interface
+      </div>
+    </footer>
+  </body>
+</html>

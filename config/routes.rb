@@ -11,9 +11,16 @@ Rails.application.routes.draw do
 
   # Club-specific routes (bmxtools.com/[club-name])
   constraints(club_slug: /[a-z0-9\-]+/) do
-    get "/:club_slug", to: "races#show", as: :club_race
+    get "/:club_slug", to: "races#show", as: :club
+    get "/:club_slug/race", to: "races#show", as: :club_race
     get "/:club_slug/admin", to: "races#admin", as: :club_admin
     patch "/:club_slug/race", to: "races#update", as: :club_race_update
+    patch "/:club_slug/race/settings", to: "races#update_settings", as: :club_race_settings
+    
+    # Admin authentication routes
+    get "/:club_slug/admin/login", to: "admin/sessions#new", as: :club_admin_login
+    post "/:club_slug/admin/login", to: "admin/sessions#create"
+    delete "/:club_slug/admin/logout", to: "admin/sessions#destroy", as: :club_admin_logout
   end
 
   # Defines the root path route ("/")

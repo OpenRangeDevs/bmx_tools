@@ -1,0 +1,16 @@
+<div class="space-y-2">
+  <div class="flex items-center justify-between">
+    <span class="text-sm text-green-800">📡 Connected to live feed</span>
+    <span class="text-xs text-green-600"><%= Time.current.strftime("%I:%M %p") %></span>
+  </div>
+  
+  <div class="text-xs text-green-700 bg-green-100 rounded p-2">
+    ✅ Real-time updates active<br>
+    🔔 Counter changes will broadcast instantly<br>
+    👥 Multiple admin users can work simultaneously
+  </div>
+  
+  <div class="text-xs text-green-600 text-center">
+    Last update: <span id="last-update-time"><%= (defined?(last_update) ? last_update : Time.current).strftime("%I:%M:%S %p") %></span>
+  </div>
+</div>

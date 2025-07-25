@@ -25,29 +25,125 @@
     <%= render "admin_counters", race: @race, club: @club %>
   </div>
 
+  <!-- Live Notifications -->
+  <div id="notifications-panel" class="bg-green-50 border border-green-300 rounded-lg p-5">
+    <h3 class="font-semibold text-green-800 mb-3 text-center">📡 Live Activity</h3>
+    <div id="live-notifications" class="space-y-2">
+      <%= render "live_notifications", club: @club %>
+    </div>
+  </div>
+
+  <!-- Race Time Settings -->
+  <div id="race-time-settings" class="bg-white border border-gray-300 rounded-lg p-5">
+    <%= render "race_time_settings", race_setting: @race_setting, club: @club %>
+  </div>
+
   <!-- Reset Section -->
-  <div class="bg-gray-100 border border-gray-300 rounded-lg p-4 text-center">
-    <h3 class="font-semibold text-gray-800 mb-3">⚠️ Reset Race</h3>
-    <%= form_with model: @race, url: club_race_update_path(@club.slug), 
-                  method: :patch, local: false,
-                  data: { turbo_method: :patch, 
-                          confirm: "Are you sure you want to reset both counters to 0? This cannot be undone." } do |form| %>
-      <%= form.hidden_field :at_gate, value: 0 %>
-      <%= form.hidden_field :in_staging, value: 0 %>
-      <%= form.submit "Reset All", 
-                      data: { counter_target: "submitButton" },
-                      style: "background-color: #dc3545; 
-                              color: white; 
-                              font-size: 18px; 
-                              font-weight: bold;
-                              min-height: 44px; 
-                              min-width: 120px; 
-                              padding: 12px 24px;
-                              border: none; 
-                              border-radius: 8px; 
-                              touch-action: manipulation;
-                              cursor: pointer;" %>
-    <% end %>
+  <div id="reset-section" class="bg-red-50 border border-red-300 rounded-lg p-5">
+    <h3 class="font-semibold text-red-800 mb-4 text-center">⚠️ Reset Counters</h3>
+    <p class="text-sm text-red-700 text-center mb-4">Reset operations cannot be undone. Use with caution.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Reset At Gate Only -->
+      <div class="text-center">
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Reset 'At Gate' counter to 0? Current value: #{@race.at_gate}" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: @race.in_staging %>
+          <%= form.submit "Reset At Gate", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" %>
+        <% end %>
+        <p class="text-xs text-red-600 mt-1">Current: <%= @race.at_gate %></p>
+      </div>
+
+      <!-- Reset In Staging Only -->
+      <div class="text-center">
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Reset 'In Staging' counter to 0? This will also reset 'At Gate' to 0 (business rule). Current staging: #{@race.in_staging}, current at gate: #{@race.at_gate}" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: 0 %>
+          <%= form.submit "Reset In Staging", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors" %>
+        <% end %>
+        <p class="text-xs text-orange-600 mt-1">Current: <%= @race.in_staging %></p>
+      </div>
+
+      <!-- Reset Both -->
+      <div class="text-center">
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Reset BOTH counters to 0? At Gate: #{@race.at_gate} → 0, In Staging: #{@race.in_staging} → 0. This cannot be undone!" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: 0 %>
+          <%= form.submit "Reset All", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-lg transition-colors" %>
+        <% end %>
+        <p class="text-xs text-red-700 mt-1">Resets everything</p>
+      </div>
+    </div>
+
+    <!-- Quick Reset to Common Values -->
+    <div class="mt-6 pt-4 border-t border-red-200">
+      <h4 class="font-semibold text-red-800 mb-3 text-center">Quick Reset to Common Values</h4>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <!-- Reset to 0/5 -->
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Set counters to: At Gate = 0, In Staging = 5?" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: 5 %>
+          <%= form.submit "0 / 5", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-2 rounded transition-colors" %>
+        <% end %>
+
+        <!-- Reset to 0/10 -->
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Set counters to: At Gate = 0, In Staging = 10?" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: 10 %>
+          <%= form.submit "0 / 10", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-2 rounded transition-colors" %>
+        <% end %>
+
+        <!-- Reset to 0/15 -->
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Set counters to: At Gate = 0, In Staging = 15?" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: 15 %>
+          <%= form.submit "0 / 15", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-2 rounded transition-colors" %>
+        <% end %>
+
+        <!-- Reset to 0/20 -->
+        <%= form_with model: @race, url: club_race_update_path(@club.slug), 
+                      method: :patch, local: false,
+                      data: { controller: "confirmation", 
+                              confirmation_message_value: "Set counters to: At Gate = 0, In Staging = 20?" } do |form| %>
+          <%= form.hidden_field :at_gate, value: 0 %>
+          <%= form.hidden_field :in_staging, value: 20 %>
+          <%= form.submit "0 / 20", 
+                          data: { action: "click->confirmation#confirm" },
+                          class: "w-full bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-2 rounded transition-colors" %>
+        <% end %>
+      </div>
+      <p class="text-xs text-red-600 text-center mt-2">Format: At Gate / In Staging</p>
+    </div>
   </div>
 </div>
 

@@ -34,5 +34,11 @@ class Race < ApplicationRecord
                        target: "admin-counters",
                        partial: "races/admin_counters",
                        locals: { race: self, club: club }
+                       
+    # Update the notification panel with timestamp
+    broadcast_update_to "club_#{club.slug}_admin",
+                       target: "live-notifications",
+                       partial: "races/live_notifications",
+                       locals: { club: club, last_update: Time.current }
   end
 end
