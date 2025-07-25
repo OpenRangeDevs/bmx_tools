@@ -1,0 +1,65 @@
+<!-- At Gate Counter -->
+<div class="counter-section" 
+     style="background-color: #ffeeee; 
+            border: 3px solid #ff4444; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-bottom: 15px;">
+  
+  <div class="text-center">
+    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #333;">
+      🏁 At Gate
+    </h2>
+    
+    <div class="counter-display">
+      <span style="font-size: 72px; 
+                   font-weight: bold; 
+                   color: #ff4444; 
+                   display: block; 
+                   line-height: 1;">
+        <%= race.at_gate %>
+      </span>
+    </div>
+    
+    <p class="text-sm text-gray-600 mt-2">
+      <% if race.at_gate == 0 %>
+        Racing hasn't started yet
+      <% else %>
+        Moto <%= race.at_gate %> is currently racing
+      <% end %>
+    </p>
+  </div>
+</div>
+
+<!-- In Staging Counter -->
+<div class="counter-section" 
+     style="background-color: #fff5ee; 
+            border: 3px solid #ff9944; 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin-bottom: 15px;">
+  
+  <div class="text-center">
+    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #333;">
+      🏃 In Staging
+    </h2>
+    
+    <div class="counter-display">
+      <span style="font-size: 72px; 
+                   font-weight: bold; 
+                   color: #ff9944; 
+                   display: block; 
+                   line-height: 1;">
+        <%= race.in_staging %>
+      </span>
+    </div>
+    
+    <p class="text-sm text-gray-600 mt-2">
+      <% if race.in_staging == 0 %>
+        No motos staging yet
+      <% else %>
+        Moto <%= race.in_staging %> should be in staging area
+      <% end %>
+    </p>
+  </div>
+</div>

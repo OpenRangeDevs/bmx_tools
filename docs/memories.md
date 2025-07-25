@@ -24,11 +24,12 @@
 - Update memories.md with any new procedures I specify
 - Confirm milestones with me regularly
 - Verify changes to requirements or approach
+- **Context7 Usage**: Always use Context7 MCP server to retrieve up-to-date documentation when starting a session on this project
 
 ### Current Project Stats
 - **Started:** 2025-07-23
 - **Initiated:** 2025-07-24
-- **Phase:** 1 - Database & Models Setup
+- **Phase:** 2 - Core Race Tracking Interface
 - **Stack:** Rails 8.0.2, SQLite3, TailwindCSS, Minitest
 - **URL Pattern:** `bmxtools.com/[club-name]`
 

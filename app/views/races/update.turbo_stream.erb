@@ -1,0 +1,18 @@
+<%= turbo_stream.update "at-gate-counter", @race.at_gate %>
+<%= turbo_stream.update "in-staging-counter", @race.in_staging %>
+<%= turbo_stream.replace "at-gate-buttons" do %>
+  <%= render "at_gate_buttons", race: @race, club: @club %>
+<% end %>
+<%= turbo_stream.replace "in-staging-buttons" do %>
+  <%= render "in_staging_buttons", race: @race, club: @club %>
+<% end %>
+
+<% if @race.at_gate > @race.in_staging %>
+  <%= turbo_stream.replace "validation-message" do %>
+    <div id="validation-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      ⚠️ At Gate cannot be greater than In Staging
+    </div>
+  <% end %>
+<% else %>
+  <%= turbo_stream.remove "validation-message" %>
+<% end %>
