@@ -16,7 +16,8 @@ Rails.application.routes.draw do
     get "/:club_slug/admin", to: "races#admin", as: :club_admin
     patch "/:club_slug/race", to: "races#update", as: :club_race_update
     patch "/:club_slug/race/settings", to: "races#update_settings", as: :club_race_settings
-    
+    post "/:club_slug/race/new", to: "races#create_new_race", as: :club_new_race
+
     # Admin authentication routes
     get "/:club_slug/admin/login", to: "admin/sessions#new", as: :club_admin_login
     post "/:club_slug/admin/login", to: "admin/sessions#create"
