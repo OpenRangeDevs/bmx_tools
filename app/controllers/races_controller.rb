@@ -9,6 +9,14 @@ class RacesController < ApplicationController
 
   def admin
     # Admin interface for race officials
+    # Ensure we have fresh data from database
+    @race.reload
+    @race_setting.reload if @race_setting
+    
+    Rails.logger.debug "=== ADMIN ACTION DEBUG ==="
+    Rails.logger.debug "Race ID: #{@race.id}, At Gate: #{@race.at_gate}, In Staging: #{@race.in_staging}"
+    Rails.logger.debug "Race updated at: #{@race.updated_at}"
+    Rails.logger.debug "=== END ADMIN DEBUG ==="
   end
 
   def update
@@ -74,15 +82,40 @@ class RacesController < ApplicationController
   private
 
   def find_club_by_slug
+    Rails.logger.debug "=== DEBUG: find_club_by_slug called ==="
+    Rails.logger.debug "Looking for club with slug: '#{params[:club_slug]}'"
+    
     @club = Club.find_by(slug: params[:club_slug])
+    Rails.logger.debug "Found club: #{@club.inspect}"
+    
     if @club.nil?
+      Rails.logger.debug "Club not found! Available clubs: #{Club.pluck(:slug).join(', ')}"
       render plain: "BMX club '#{params[:club_slug]}' not found. Available clubs: #{Club.pluck(:slug).join(', ')}", status: :not_found
+    else
+      Rails.logger.debug "Successfully found club: #{@club.name} (ID: #{@club.id})"
     end
+    Rails.logger.debug "=== END DEBUG ==="
   end
 
   def find_or_create_race
-    @race = @club.race || @club.create_race!(at_gate: 0, in_staging: 0)
+    Rails.logger.debug "=== DEBUG: find_or_create_race called ==="
+    Rails.logger.debug "Club: #{@club.name} (ID: #{@club.id}, slug: #{@club.slug})"
+    
+    existing_race = @club.race
+    Rails.logger.debug "Existing race: #{existing_race.inspect}"
+    
+    if existing_race
+      Rails.logger.debug "Found existing race ID: #{existing_race.id}, at_gate: #{existing_race.at_gate}, in_staging: #{existing_race.in_staging}"
+      @race = existing_race
+    else
+      Rails.logger.debug "No existing race found, creating new race with at_gate: 0, in_staging: 0"
+      @race = @club.create_race!(at_gate: 0, in_staging: 0)
+      Rails.logger.debug "Created new race ID: #{@race.id}"
+    end
+    
     @race_setting = @race.race_setting || @race.create_race_setting!
+    Rails.logger.debug "Final race: ID #{@race.id}, at_gate: #{@race.at_gate}, in_staging: #{@race.in_staging}"
+    Rails.logger.debug "=== END DEBUG ==="
   end
 
   def race_params
