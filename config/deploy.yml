@@ -7,7 +7,7 @@ image: openrangedevs/bmx-race-tracker
 # Deploy to these servers.
 servers:
   web:
-    - 104.248.177.13
+    - 137.184.163.211
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -18,8 +18,7 @@ servers:
 #
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
-  ssl: true
-  host: bmxtools.com
+  ssl: false
   # Rails apps run on port 3000
   app_port: 3000
 
