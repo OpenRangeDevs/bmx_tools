@@ -27,7 +27,7 @@ class ClubTest < ActiveSupport::TestCase
   end
 
   test "should validate slug format" do
-    invalid_slugs = ["Calgary BMX", "fort_saskatchewan", "lethbridge@bmx", "medicine.hat", "GRANDE-PRAIRIE"]
+    invalid_slugs = [ "Calgary BMX", "fort_saskatchewan", "lethbridge@bmx", "medicine.hat", "GRANDE-PRAIRIE" ]
     invalid_slugs.each do |slug|
       club = Club.new(name: "Camrose BMX Track", slug: slug)
       assert_not club.valid?, "#{slug} should be invalid"
@@ -36,7 +36,7 @@ class ClubTest < ActiveSupport::TestCase
   end
 
   test "should accept valid slug formats" do
-    valid_slugs = ["airdrie-bmx", "spruce-grove-2024", "sherwood-park-bmx-association", "okotoks-racing", "canmore-bmx"]
+    valid_slugs = [ "airdrie-bmx", "spruce-grove-2024", "sherwood-park-bmx-association", "okotoks-racing", "canmore-bmx" ]
     valid_slugs.each do |slug|
       club = Club.new(name: "Brooks BMX Club", slug: slug)
       assert club.valid?, "#{slug} should be valid"
@@ -48,11 +48,11 @@ class ClubTest < ActiveSupport::TestCase
     assert_equal "cochrane-bmx", club.to_param
   end
 
-  test "should have many races with dependent destroy" do
+  test "should have one race with dependent destroy" do
     club = Club.create!(name: "Strathmore BMX Racing")
-    race = club.races.create!(at_gate: 0, in_staging: 1)
-    
-    assert_equal 1, club.races.count
+    race = club.create_race!(at_gate: 0, in_staging: 1)
+
+    assert_not_nil club.race
     club.destroy
     assert_equal 0, Race.count
   end
