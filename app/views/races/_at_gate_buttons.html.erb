@@ -1,11 +1,23 @@
-<div id="at-gate-buttons" class="flex justify-center items-center gap-4 mb-4">
+<div id="at-gate-buttons" class="flex justify-center items-center gap-4 mb-4" 
+     data-controller="loading-state keyboard-navigation" 
+     data-loading-state-loading-class="opacity-60" 
+     data-loading-state-hidden-class="hidden"
+     data-keyboard-navigation-counter-type-value="At Gate"
+     data-keyboard-navigation-current-value-value="<%= race.at_gate %>"
+     tabindex="0">
   <!-- Decrement Button (smaller) -->
   <%= form_with model: race, url: club_race_update_path(club.slug), 
                 method: :patch, local: false, 
-                data: { turbo_method: :patch } do |form| %>
+                data: { 
+                  turbo_method: :patch,
+                  action: "turbo:submit-start->loading-state#handleTurboSubmitStart turbo:submit-end->loading-state#handleTurboSubmitEnd"
+                } do |form| %>
     <%= form.hidden_field :at_gate, value: [race.at_gate - 1, 0].max %>
     <%= form.hidden_field :in_staging, value: race.in_staging %>
     <%= form.submit "-1",
+                    "aria-label": "Decrease At Gate counter by 1. Current value: #{race.at_gate}",
+                    "title": "Decrease At Gate counter",
+                    "data-keyboard-navigation-target": "decrement",
                     data: { 
                       action: "touchstart->counter#handleTouchStart touchend->counter#handleTouchEnd mousedown->counter#handleMouseDown mouseup->counter#handleMouseUp" 
                     }, 
@@ -25,10 +37,16 @@
   <!-- Increment Button (larger) -->
   <%= form_with model: race, url: club_race_update_path(club.slug), 
                 method: :patch, local: false,
-                data: { turbo_method: :patch } do |form| %>
+                data: { 
+                  turbo_method: :patch,
+                  action: "turbo:submit-start->loading-state#handleTurboSubmitStart turbo:submit-end->loading-state#handleTurboSubmitEnd"
+                } do |form| %>
     <%= form.hidden_field :at_gate, value: race.at_gate + 1 %>
     <%= form.hidden_field :in_staging, value: [race.in_staging, race.at_gate + 1].max %>
     <%= form.submit "+1",
+                    "aria-label": "Increase At Gate counter by 1. Current value: #{race.at_gate}",
+                    "title": "Increase At Gate counter",
+                    "data-keyboard-navigation-target": "increment",
                     data: { 
                       action: "touchstart->counter#handleTouchStart touchend->counter#handleTouchEnd mousedown->counter#handleMouseDown mouseup->counter#handleMouseUp" 
                     }, 
