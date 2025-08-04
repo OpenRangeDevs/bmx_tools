@@ -9,7 +9,7 @@ class CreateRaceActivities < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :race_activities, [:club_id, :created_at]
+    add_index :race_activities, [ :club_id, :created_at ]
     add_index :race_activities, :activity_type
   end
 end

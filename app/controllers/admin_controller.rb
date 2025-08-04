@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
   before_action :authenticate_admin!
   before_action :check_session_timeout!
-  layout 'admin'
+  layout "admin"
 
   # Session timeout: 4 hours
   SESSION_TIMEOUT = 4.hours
@@ -10,7 +10,7 @@ class AdminController < ApplicationController
 
   def authenticate_admin!
     unless admin_authenticated?
-      redirect_to admin_login_path, alert: 'Please log in to access admin features'
+      redirect_to admin_login_path, alert: "Please log in to access admin features"
     end
   end
 
@@ -23,8 +23,8 @@ class AdminController < ApplicationController
       last_activity = Time.zone.parse(session[:admin_login_time])
       if Time.current - last_activity > SESSION_TIMEOUT
         reset_session
-        redirect_to admin_login_path, alert: 'Your session has expired. Please log in again.'
-        return false
+        redirect_to admin_login_path, alert: "Your session has expired. Please log in again."
+        false
       else
         # Update last activity time
         session[:admin_login_time] = Time.current.to_s
