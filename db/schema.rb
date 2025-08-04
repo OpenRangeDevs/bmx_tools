@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_25_000001) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_04_152230) do
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "timezone", default: "Mountain Time (US & Canada)", null: false
     t.index ["slug"], name: "index_clubs_on_slug", unique: true
   end
 
@@ -47,7 +48,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_25_000001) do
   create_table "races", force: :cascade do |t|
     t.integer "at_gate", default: 0, null: false
     t.integer "in_staging", default: 0, null: false
-    t.boolean "active", default: true, null: false
     t.integer "club_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

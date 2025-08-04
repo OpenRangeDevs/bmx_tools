@@ -7,11 +7,10 @@ class Race < ApplicationRecord
   validates :in_staging, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :at_gate_must_be_less_than_staging
 
-  scope :active, -> { where(active: true) }
 
   # Track changes for activity logging
   before_update :track_counter_changes
-  
+
   # Broadcast updates to all connected clients for this club
   after_update_commit :broadcast_race_update
   after_update_commit :log_counter_activity
@@ -36,10 +35,10 @@ class Race < ApplicationRecord
     # Only log if counters actually changed
     if @previous_at_gate != at_gate || @previous_in_staging != in_staging
       RaceActivity.log_counter_update(
-        self, 
-        @previous_at_gate, 
-        @previous_in_staging, 
-        at_gate, 
+        self,
+        @previous_at_gate,
+        @previous_in_staging,
+        at_gate,
         in_staging
       )
     end
@@ -47,17 +46,17 @@ class Race < ApplicationRecord
 
   def broadcast_race_update
     # Broadcast to the club-specific stream (for public display)
-    broadcast_update_to "club_#{club.slug}", 
+    broadcast_update_to "club_#{club.slug}",
                        target: "race-display",
-                       partial: "races/race_display", 
+                       partial: "races/race_display",
                        locals: { race: self, club: club }
-                       
+
     # Also broadcast to admin pages (for multiple admin users)
     broadcast_update_to "club_#{club.slug}_admin",
                        target: "admin-counters",
                        partial: "races/admin_counters",
                        locals: { race: self, club: club }
-                       
+
     # Update the notification panel with timestamp
     broadcast_update_to "club_#{club.slug}_admin",
                        target: "live-notifications",

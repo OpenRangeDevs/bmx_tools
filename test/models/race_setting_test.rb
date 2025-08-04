@@ -3,7 +3,7 @@ require "test_helper"
 class RaceSettingTest < ActiveSupport::TestCase
   def setup
     @red_deer_bmx = Club.create!(name: "Red Deer BMX Association", slug: "red-deer-bmx")
-    @provincial_race = @red_deer_bmx.races.create!(at_gate: 0, in_staging: 3)
+    @provincial_race = @red_deer_bmx.create_race!(at_gate: 0, in_staging: 3)
   end
 
   test "should create valid race day settings with typical race schedule" do
@@ -71,15 +71,15 @@ class RaceSettingTest < ActiveSupport::TestCase
 
   test "should handle provincial championship race settings" do
     calgary_olympics = Club.create!(name: "Calgary Olympic BMX Club")
-    championship_race = calgary_olympics.races.create!(at_gate: 0, in_staging: 5)
-    
+    championship_race = calgary_olympics.create_race!(at_gate: 0, in_staging: 5)
+
     race_setting = championship_race.create_race_setting!(
       registration_deadline: Time.parse("7:30 AM"),
       race_start_time: Time.parse("9:00 AM"),
       notification_message: "Provincial Championship - riders meeting in 10 minutes",
       notification_expires_at: Time.current + 10.minutes
     )
-    
+
     assert race_setting.valid?
     assert race_setting.notification_active?
     assert_equal championship_race, race_setting.race

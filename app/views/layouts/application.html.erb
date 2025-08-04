@@ -7,6 +7,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="<%= pwa_manifest_path %>" />
+    <meta name="theme-color" content="#dc2626" />
 
     <%= yield :head %>
 
@@ -20,7 +24,9 @@
   </head>
 
   <body class="bg-gray-50" style="font-family: 'Roboto', sans-serif;">
-    <div class="min-h-screen" style="padding: 10px;">
+    <div class="min-h-screen" style="padding: 10px;" 
+         data-controller="service-worker" 
+         data-service-worker-path-value="<%= pwa_service_worker_path %>">
       <%= render "shared/flash" if flash.any? %>
       <%= yield %>
     </div>

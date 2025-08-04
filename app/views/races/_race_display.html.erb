@@ -1,5 +1,8 @@
 <!-- At Gate Counter -->
 <div class="counter-section" 
+     role="region"
+     aria-labelledby="at-gate-heading"
+     aria-describedby="at-gate-description"
      style="background-color: #ffeeee; 
             border: 3px solid #ff4444; 
             border-radius: 12px; 
@@ -7,12 +10,16 @@
             margin-bottom: 15px;">
   
   <div class="text-center">
-    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #333;">
+    <h2 id="at-gate-heading" 
+        style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #333;">
       🏁 At Gate
     </h2>
     
     <div class="counter-display">
-      <span style="font-size: 72px; 
+      <span role="status" 
+            aria-live="polite"
+            aria-label="Moto number currently at gate: <%= race.at_gate %>"
+            style="font-size: 72px; 
                    font-weight: bold; 
                    color: #ff4444; 
                    display: block; 
@@ -21,7 +28,7 @@
       </span>
     </div>
     
-    <p class="text-sm text-gray-600 mt-2">
+    <p id="at-gate-description" class="text-sm text-gray-600 mt-2">
       <% if race.at_gate == 0 %>
         Racing hasn't started yet
       <% else %>
@@ -33,6 +40,9 @@
 
 <!-- In Staging Counter -->
 <div class="counter-section" 
+     role="region"
+     aria-labelledby="in-staging-heading"
+     aria-describedby="in-staging-description"
      style="background-color: #fff5ee; 
             border: 3px solid #ff9944; 
             border-radius: 12px; 
@@ -40,12 +50,16 @@
             margin-bottom: 15px;">
   
   <div class="text-center">
-    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #333;">
+    <h2 id="in-staging-heading" 
+        style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #333;">
       🏃 In Staging
     </h2>
     
     <div class="counter-display">
-      <span style="font-size: 72px; 
+      <span role="status" 
+            aria-live="polite"
+            aria-label="Moto number currently in staging: <%= race.in_staging %>"
+            style="font-size: 72px; 
                    font-weight: bold; 
                    color: #ff9944; 
                    display: block; 
@@ -54,7 +68,7 @@
       </span>
     </div>
     
-    <p class="text-sm text-gray-600 mt-2">
+    <p id="in-staging-description" class="text-sm text-gray-600 mt-2">
       <% if race.in_staging == 0 %>
         No motos staging yet
       <% else %>

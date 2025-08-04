@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Club-specific routes (bmxtools.com/[club-name])
   constraints(club_slug: /[a-z0-9\-]+/) do
@@ -16,7 +16,8 @@ Rails.application.routes.draw do
     get "/:club_slug/admin", to: "races#admin", as: :club_admin
     patch "/:club_slug/race", to: "races#update", as: :club_race_update
     patch "/:club_slug/race/settings", to: "races#update_settings", as: :club_race_settings
-    
+    post "/:club_slug/race/new", to: "races#create_new_race", as: :club_new_race
+
     # Admin authentication routes
     get "/:club_slug/admin/login", to: "admin/sessions#new", as: :club_admin_login
     post "/:club_slug/admin/login", to: "admin/sessions#create"

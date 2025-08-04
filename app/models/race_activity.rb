@@ -28,7 +28,7 @@ class RaceActivity < ApplicationRecord
     create!(
       race: race,
       club: race.club,
-      activity_type: 'counter_update',
+      activity_type: "counter_update",
       message: "Counters updated: At Gate #{old_at_gate}→#{new_at_gate}, In Staging #{old_in_staging}→#{new_in_staging}",
       metadata: {
         old_at_gate: old_at_gate,
@@ -43,7 +43,7 @@ class RaceActivity < ApplicationRecord
     create!(
       race: race,
       club: race.club,
-      activity_type: 'reset_performed',
+      activity_type: "reset_performed",
       message: "Race counters reset (#{reset_type})",
       metadata: { reset_type: reset_type }
     )
@@ -52,7 +52,7 @@ class RaceActivity < ApplicationRecord
   def self.log_admin_action(club, action, details = {})
     # Find active race or create activity without race
     race = club.races.active.first
-    
+
     create!(
       race: race,
       club: club,

@@ -11,8 +11,20 @@
   </div>
 
   <!-- Race Display (updates via Turbo Stream) -->
-  <div id="race-display">
-    <%= render "race_display", race: @race, club: @club %>
+  <div id="race-display" 
+       data-controller="loading-state" 
+       data-loading-state-loading-class="opacity-50" 
+       data-loading-state-hidden-class="hidden">
+    
+    <!-- Skeleton Screen -->
+    <div data-loading-state-target="skeleton" class="hidden">
+      <%= render "shared/skeleton_race_display" %>
+    </div>
+    
+    <!-- Actual Content -->
+    <div data-loading-state-target="content">
+      <%= render "race_display", race: @race, club: @club %>
+    </div>
   </div>
 
   <!-- Enhanced Race Times with Countdown Timers -->

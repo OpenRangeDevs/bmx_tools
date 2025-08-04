@@ -60,6 +60,24 @@
     <%= render "race_time_settings", race_setting: @race_setting, club: @club %>
   </div>
 
+  <!-- Reset Race Section -->
+  <div class="bg-green-50 border border-green-300 rounded-lg p-5">
+    <h3 class="font-semibold text-green-800 mb-4 text-center">🏁 Reset Race</h3>
+    <p class="text-sm text-green-700 text-center mb-4">Reset counters to 0 and update race times to realistic defaults.</p>
+    
+    <div class="text-center">
+      <%= form_with url: club_new_race_path(@club.slug), 
+                    method: :post, local: false,
+                    data: { controller: "confirmation", 
+                            confirmation_message_value: "Reset race? This will reset all counters to 0 and update race times to realistic defaults." } do |form| %>
+        <%= form.submit "🔄 Reset Race", 
+                        data: { action: "click->confirmation#confirm" },
+                        class: "bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg" %>
+      <% end %>
+      <p class="text-xs text-green-600 mt-2">⏰ Times will be set to: Registration in 1 hour, Race start in 3 hours</p>
+    </div>
+  </div>
+
   <!-- Reset Section -->
   <div id="reset-section" class="bg-red-50 border border-red-300 rounded-lg p-5">
     <h3 class="font-semibold text-red-800 mb-4 text-center">⚠️ Reset Counters</h3>
