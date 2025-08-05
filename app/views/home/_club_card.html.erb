@@ -1,0 +1,49 @@
+<div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6">
+  <div class="flex justify-between items-start mb-4">
+    <h4 class="text-xl font-semibold text-gray-800">
+      <%= club.name %>
+    </h4>
+    <span class="px-3 py-1 rounded-full text-sm font-medium <%= status_badge_classes(status) %>">
+      <%= status %>
+    </span>
+  </div>
+  
+  <% if club.race %>
+    <div class="mb-4 space-y-2">
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">At Gate:</span>
+        <span class="font-semibold text-red-600"><%= club.race.at_gate %></span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">In Staging:</span>
+        <span class="font-semibold text-orange-600"><%= club.race.in_staging %></span>
+      </div>
+      
+      <% if club.race.race_setting %>
+        <% race_setting = club.race.race_setting %>
+        <% if race_setting.race_start_time %>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">Race Time:</span>
+            <span class="text-gray-700"><%= race_setting.race_start_time.strftime("%I:%M %p") %></span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="mb-4 text-sm text-gray-500">
+      No active race scheduled
+    </div>
+  <% end %>
+  
+  <div class="flex gap-2">
+    <%= link_to club_path(club.slug), 
+        class: "flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium" do %>
+      View Live Race
+    <% end %>
+    
+    <%= link_to club_admin_path(club.slug), 
+        class: "bg-gray-100 text-gray-700 text-center py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm font-medium" do %>
+      Admin
+    <% end %>
+  </div>
+</div>
