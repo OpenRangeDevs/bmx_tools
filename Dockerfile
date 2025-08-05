@@ -45,6 +45,13 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
+# Ensure TailwindCSS builds are available before asset precompilation
+RUN if [ ! -f app/assets/builds/tailwind.css ]; then \
+      echo "Warning: TailwindCSS build file not found. Creating placeholder." && \
+      mkdir -p app/assets/builds && \
+      touch app/assets/builds/tailwind.css; \
+    fi
+
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
