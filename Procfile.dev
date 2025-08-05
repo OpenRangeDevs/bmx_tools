@@ -1,2 +1,2 @@
 web: bin/rails server
-css: tailwindcss --input app/assets/stylesheets/tailwind.css --output app/assets/builds/tailwind.css --watch
+css: tailwindcss --input app/assets/stylesheets/tailwind.css --output app/assets/builds/tailwind.css --watch --content "app/views/**/*.html.erb" --content "app/helpers/**/*.rb" --content "app/assets/javascripts/**/*.js"
