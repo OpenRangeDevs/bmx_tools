@@ -17,9 +17,11 @@ app/assets/builds/
 /.yardoc
 /Gemfile.lock
 /config/master.key
-/config/credentials.yml.enc
 /public/assets
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Kamal deployment secrets
+/.kamal/secrets
