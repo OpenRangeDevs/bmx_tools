@@ -2,12 +2,22 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-# NOTE: Super Admin user creation will be added in Phase 6.1 when User model is implemented
-# Placeholder for Phase 6.1:
-# super_admin = User.find_or_create_by(email: 'roger@openrangedevs.com') do |user|
-#   user.password = 'roger123!'
-# end
-# ToolPermission.find_or_create_by(user: super_admin, tool: 'race_management', role: 'super_admin')
+# Create Super Admin user for platform administration
+puts "Creating Super Admin user..."
+super_admin = User.find_or_create_by(email: 'roger@openrangedevs.com') do |user|
+  user.password = 'roger123!'
+end
+
+# Create Super Admin permission for race_management tool
+permission = ToolPermission.find_or_create_by(
+  user: super_admin, 
+  tool: 'race_management', 
+  role: 'super_admin'
+) do |perm|
+  perm.club = nil  # Super admin has no specific club
+end
+
+puts "✅ Created Super Admin: #{super_admin.email} (role: #{permission.role})"
 
 # Create Alberta BMX test data for development
 puts "Creating Alberta BMX test data..."

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_04_152230) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_12_190121) do
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -54,8 +54,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_152230) do
     t.index ["club_id"], name: "index_races_on_club_id"
   end
 
+  create_table "tool_permissions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "tool", default: 0, null: false
+    t.integer "role", null: false
+    t.integer "club_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["club_id"], name: "index_tool_permissions_on_club_id"
+    t.index ["user_id", "tool", "club_id"], name: "index_tool_permissions_on_user_id_and_tool_and_club_id", unique: true
+    t.index ["user_id"], name: "index_tool_permissions_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
   add_foreign_key "race_activities", "clubs"
   add_foreign_key "race_activities", "races"
   add_foreign_key "race_settings", "races"
   add_foreign_key "races", "clubs"
+  add_foreign_key "tool_permissions", "clubs"
+  add_foreign_key "tool_permissions", "users"
 end
