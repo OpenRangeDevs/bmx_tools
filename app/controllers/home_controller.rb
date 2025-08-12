@@ -4,11 +4,11 @@ class HomeController < ApplicationController
                        .includes(:race, race: :race_setting)
                        .where.not(races: { id: nil })
                        .order(:name)
-    
+
     @inactive_clubs = Club.left_joins(:race)
                          .where(races: { id: nil })
                          .order(:name)
-    
+
     @all_clubs = @active_clubs + @inactive_clubs
   end
 
@@ -21,7 +21,7 @@ class HomeController < ApplicationController
     return "Racing Active" unless race_setting
 
     now = Time.current
-    
+
     if race_setting.race_start_time && now >= race_setting.race_start_time
       "Racing in Progress"
     elsif race_setting.registration_deadline && now <= race_setting.registration_deadline

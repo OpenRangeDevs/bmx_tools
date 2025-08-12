@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+super_admin_permission:
+  user: super_admin
+  tool: 0  # race_management
+  role: 0  # super_admin
+  club:    # null for super_admin
+
+club_admin_permission:
+  user: club_admin
+  tool: 0  # race_management
+  role: 1  # club_admin
+  club: calgary_bmx

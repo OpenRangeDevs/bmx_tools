@@ -1,3 +1,22 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# Empty fixtures to avoid conflicts with unique constraints in tests
+calgary_bmx:
+  name: Calgary BMX Association
+  slug: calgary-bmx
+
+edmonton_bmx:
+  name: Edmonton BMX Club
+  slug: edmonton-bmx
+
+airdrie_bmx:
+  name: Airdrie BMX
+  slug: airdriebmx
+
+# Keep existing ones for compatibility
+one:
+  name: Test Club One
+  slug: test-club-one
+
+two:
+  name: Test Club Two
+  slug: test-club-two

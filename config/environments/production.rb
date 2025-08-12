@@ -17,7 +17,7 @@ Rails.application.configure do
 
   # Enable Rails to serve static files in production (needed for Kamal deployment)
   config.public_file_server.enabled = true
-  
+
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
