@@ -10,8 +10,8 @@ end
 
 # Create Super Admin permission for race_management tool
 permission = ToolPermission.find_or_create_by(
-  user: super_admin, 
-  tool: 'race_management', 
+  user: super_admin,
+  tool: 'race_management',
   role: 'super_admin'
 ) do |perm|
   perm.club = nil  # Super admin has no specific club
