@@ -1,7 +1,7 @@
 class RacesController < ApplicationController
   before_action :find_club_by_slug
   before_action :find_or_create_race
-  before_action :authenticate_admin!, only: [ :admin, :update, :update_settings, :create_new_race ]
+  before_action :require_club_admin!, only: [ :admin, :update, :update_settings, :create_new_race ]
 
   def show
     # Public race tracking display for spectators and riders
@@ -160,12 +160,16 @@ class RacesController < ApplicationController
     @club.time_zone.parse(time_string)
   end
 
-  def authenticate_admin!
-    unless admin_authenticated?
-      redirect_to club_admin_login_path(@club), alert: "Please log in to access admin features"
+  def require_club_admin!
+    unless signed_in?
+      redirect_to login_path, alert: "Please sign in to continue"
       return
     end
-    check_session_timeout!
+    
+    unless current_user&.admin_for?(@club)
+      redirect_to login_path, alert: "Access denied"
+      return
+    end
   end
 
   def admin_authenticated?
