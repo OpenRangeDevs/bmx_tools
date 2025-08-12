@@ -1,17 +1,17 @@
 # Claude Context & Project Documentation
 
 ## Project Overview
-BMX Race Tracker - A mobile-first web application for tracking BMX race moto progression with dual independent counters (At Gate/In Staging).
+BMX Race Tracker - A mobile-first web application for tracking BMX race moto progression with dual independent counters (At Gate/In Staging). Evolving into a comprehensive BMX tools platform.
 
 ## Essential Documentation Files
 **READ THESE FIRST** before making any changes or suggestions:
 
 ### 📋 Core Requirements
 - `@docs/prd.md` - Complete Product Requirements Document with all specifications
-- `@docs/master_task_list.md` - Master project roadmap with 5 phases and technical requirements
+- `@docs/master_task_list.md` - Master project roadmap with all phases and technical requirements
 
 ### 🚀 Current Phase Information  
-- `@docs/phases/phase-3-admin-race-management.md` - Detailed current phase tasks and checklist
+- `@docs/phases/phase-6-1-auth-foundation.md` - Current phase: Platform admin authentication
 - `@docs/memories.md` - Project procedures, preferences, and development history
 
 ## Key Project Constraints
@@ -24,15 +24,40 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 
 ## Development Process Requirements
 
-### Documentation Maintenance
-⚠️ **CRITICAL**: Always keep documentation current with these rules:
-1. **Update this CLAUDE.md file** whenever project structure or key procedures change
-2. **Update @docs/memories.md** with any new procedures or preferences specified by the user
-3. **Update phase documentation** in real-time as tasks are completed
-4. **Update master task list** when phases or requirements change
-5. **Context7 Integration**: Always use Context7 MCP server to retrieve current documentation when starting sessions
+### ⚠️ CRITICAL Phase Development Process
+**MANDATORY**: Each phase must follow this exact workflow:
 
-### Phase-by-Phase Development
+1. **Phase Execution**:
+   - Complete ALL tasks from current phase documentation
+   - Mark tasks complete in real-time within phase documentation
+   - NO jumping ahead to future phases
+
+2. **Testing & Verification**:
+   - Provide detailed test information to user
+   - Run all tests ensuring they pass
+   - Wait for USER APPROVAL before proceeding
+
+3. **Git Workflow**:
+   - Create phase branch: `phase-[n]-[feature-description]`
+   - Make atomic, conventional commits (not bulk commits)
+   - Examples: 
+     - `feat(auth): add User model with secure password`
+     - `test(auth): add user authentication tests`
+     - `fix(auth): correct email validation pattern`
+
+4. **Pull Request Process**:
+   - Create PR with comprehensive description
+   - Include testing instructions
+   - Wait for USER to merge PR
+   - ONLY proceed to next phase after merge
+
+5. **Documentation**:
+   - Update this CLAUDE.md file when procedures change
+   - Update @docs/memories.md with new preferences
+   - Keep phase documentation current with progress
+   - Update master task list when phases change
+
+### Phase-by-Phase Development Rules
 1. Complete current phase tasks from `@docs/phases/phase-[n]-[title].md`
 2. Mark tasks complete in real-time within phase documentation
 3. Request user verification before proceeding to next phase
@@ -47,9 +72,9 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - Test data must reflect authentic BMX racing scenarios (gate numbers, moto progression, etc.)
 
 ## Current Status
-- **Phase**: 5 - Testing & Deployment ✅ COMPLETE
-- **Branch**: `phase-5-testing-deployment`
-- **Next Milestone**: Alpha Market Testing & User Feedback
+- **Phase**: 6.1 - Authentication Foundation 🚧 IN PROGRESS
+- **Branch**: `main` (preparing for `phase-6-1-auth-foundation`)
+- **Next Milestone**: Platform admin authentication system
 
 ## Key Business Rules
 1. **At Gate Counter**: min 0, must be < In Staging
@@ -64,11 +89,11 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - Communicate clearly about testing procedures
 
 ---
-**Last Updated**: 2025-08-04  
-**Current Phase**: Phase 5 - Testing & Deployment ✅ COMPLETE
-**Phase 1**: ✅ COMPLETE (29 tests passing, merged to main)
+**Last Updated**: 2025-08-12  
+**Current Phase**: Phase 6.1 - Authentication Foundation 🚧
+**Phase 1**: ✅ COMPLETE (Database & Models - merged to main)
 **Phase 2**: ✅ COMPLETE (Core race interface with dual counters)
-**Phase 3**: ✅ COMPLETE (41/42 tests passing, admin authentication & management)
-**Phase 4.1**: ✅ COMPLETE (Enhanced real-time broadcasting & countdown timers)
-**Phase 4.2**: ✅ COMPLETE (Mobile performance optimization, loading states, animations, accessibility)
-**Phase 5**: ✅ COMPLETE (47 tests passing, comprehensive documentation, alpha-ready)
+**Phase 3**: ✅ COMPLETE (Admin authentication & management)
+**Phase 4**: ✅ COMPLETE (Real-time updates & mobile polish)
+**Phase 5**: ✅ COMPLETE (Testing & deployment - IN PRODUCTION)
+**Phase 6**: 🚧 IN PROGRESS (Platform Administration - 4 sub-phases)

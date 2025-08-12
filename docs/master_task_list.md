@@ -1,16 +1,17 @@
 # BMX Race Tracker - Master Task List
 
 ## Project Overview
-Mobile-first BMX race tracking web application using Ruby on Rails 8, SQLite, Hotwire, and Minitest.
+Mobile-first BMX race tracking web application evolving into a comprehensive BMX tools platform.
 - **URL Pattern**: `bmxtools.com/[club-name]`
 - **Stack**: Rails 8.0.2, SQLite3, TailwindCSS, Minitest
 - **Started**: 2025-07-23
+- **Deployed**: August 2025 (Alpha)
 
-## Phase Structure
+## Completed Phases (Production Deployed)
 
 ### Phase 1: Database & Models Setup ✅
-**Status**: COMPLETE - Merged to main
-**Branch**: `phase-1-database-models` (merged & deleted)
+**Status**: COMPLETE - In Production
+**Branch**: `phase-1-database-models` (merged)
 
 #### Core Tasks:
 - [x] Create Club model with slug-based routing
@@ -21,13 +22,13 @@ Mobile-first BMX race tracking web application using Ruby on Rails 8, SQLite, Ho
 - [x] Write comprehensive model tests (29 tests, 92 assertions, 0 failures)
 - [x] Set up club-specific URL routing
 
-**Completion Criteria**: ✅ Models created, tested, and routing functional
+**Completion**: Models created, tested, and routing functional
 
 ---
 
 ### Phase 2: Core Race Tracking Interface ✅
-**Status**: COMPLETE - Merged to main
-**Branch**: `phase-2-core-race-interface` (merged & deleted)
+**Status**: COMPLETE - In Production
+**Branch**: `phase-2-core-race-interface` (merged)
 
 #### Core Tasks:
 - [x] Generate RacesController with show and admin actions
@@ -38,13 +39,13 @@ Mobile-first BMX race tracking web application using Ruby on Rails 8, SQLite, Ho
 - [x] Implement validation rules and error handling
 - [x] Add visual feedback for touch interactions (Stimulus controllers)
 
-**Completion Criteria**: ✅ Functional race tracking interface with proper validation
+**Completion**: Functional race tracking interface with proper validation
 
 ---
 
 ### Phase 3: Admin Race Management ✅
-**Status**: COMPLETE - Merged to main
-**Branch**: `phase-3-admin-race-management` (merged & deleted)
+**Status**: COMPLETE - In Production
+**Branch**: `phase-3-admin-race-management` (merged)
 
 #### Core Tasks:
 - [x] Create admin authentication system
@@ -54,12 +55,12 @@ Mobile-first BMX race tracking web application using Ruby on Rails 8, SQLite, Ho
 - [x] Create admin controls for counter management
 - [x] Add proper authorization controls
 
-**Completion Criteria**: ✅ Complete admin interface with all management features (41/42 tests passing)
+**Completion**: Complete admin interface with all management features (41/42 tests passing)
 
 ---
 
-### Phase 4.1: Enhanced Real-time Broadcasting & Countdown Timers ✅
-**Status**: COMPLETE - Merged to main
+### Phase 4: Real-time Updates & Polish ✅
+**Status**: COMPLETE - In Production
 **Branch**: `phase-4-real-time-polish` (merged)
 
 #### Core Tasks:
@@ -67,103 +68,172 @@ Mobile-first BMX race tracking web application using Ruby on Rails 8, SQLite, Ho
 - [x] Add notification system with countdown timers
 - [x] Create live activity feed with race progression tracking
 - [x] Add connection status monitoring with retry logic
-- [x] Implement real-time validation and synchronization
+- [x] Optimize mobile performance and touch targets
+- [x] Add loading states and skeleton screens
+- [x] Implement smooth animations and transitions
+- [x] Add offline capability with service worker
+- [x] Enhance accessibility and keyboard navigation
 
-**Completion Criteria**: ✅ Enhanced real-time features with countdown timers
-
----
-
-### Phase 4.2: Mobile Performance & UX Enhancement ✅
-**Status**: COMPLETE
-**Branch**: `phase-4.2-mobile-performance`
-
-#### Core Tasks:
-- [x] Optimize mobile performance and touch targets (\u2705 from Phase 4.1)
-- [x] Add loading states and skeleton screens (\u2705 Completed)
-- [x] Implement smooth animations and transitions (\u2705 Completed)
-- [x] Add offline capability with service worker (\u2705 Completed)
-- [x] Enhance accessibility and keyboard navigation (\u2705 Completed)
-
-**Completion Criteria**: ✅ Production-ready mobile performance and UX
+**Completion**: Enhanced real-time features with production-ready mobile UX
 
 ---
 
 ### Phase 5: Testing & Deployment ✅
-**Status**: COMPLETE ✅
-**Branch**: `phase-5-testing-deployment`
+**Status**: COMPLETE - In Production
+**Branch**: `phase-5-testing-deployment` (merged)
 
-#### Core Tasks (Alpha Focus):
-- [x] Comprehensive testing suite (47 tests passing, 6 integration workflows)
+#### Core Tasks:
+- [x] Comprehensive testing suite (47 tests passing)
 - [x] User documentation (admin guide, public guide, troubleshooting)
-- [x] Deployment documentation (Heroku, DigitalOcean, Railway, VPS)
+- [x] Deployment documentation (Kamal, DigitalOcean, VPS)
 - [x] Feature overview (marketing, competitive analysis, roadmap)
 - [x] Alpha product preparation (market testing ready)
 
-**Completion Criteria**: ✅ Alpha-ready application with comprehensive testing, complete documentation, and deployment guides
+**Completion**: Alpha-ready application deployed to production
+
+---
+
+## Active Development Phases
+
+### Phase 6: Platform Administration 🚧
+**Status**: IN DEVELOPMENT
+**Purpose**: Enable platform-wide club management via web UI, eliminating console access requirements
+
+#### Phase 6.1: Authentication Foundation
+**Status**: NOT STARTED
+**Branch**: `phase-6-1-auth-foundation`
+
+##### Core Tasks:
+- [ ] Enable bcrypt in Gemfile
+- [ ] Create User model with email/password authentication
+- [ ] Create ToolPermission model for flexible authorization
+- [ ] Build unified SessionsController with `/login` route
+- [ ] Add authorization helpers to ApplicationController
+- [ ] Update seeds with Super Admin user and Airdrie BMX
+- [ ] Write comprehensive auth tests
+
+**Completion Criteria**: User authentication system functional with role-based permissions
+
+---
+
+#### Phase 6.2: Platform Admin Dashboard
+**Status**: NOT STARTED
+**Branch**: `phase-6-2-admin-dashboard`
+
+##### Core Tasks:
+- [ ] Create Admin namespace and base controller
+- [ ] Build Admin::DashboardController with platform metrics
+- [ ] Design dashboard home view with club statistics
+- [ ] Implement activity monitoring and audit logging
+- [ ] Add real-time updates for platform activity
+- [ ] Style with TailwindCSS matching existing design
+- [ ] Write dashboard controller tests
+
+**Completion Criteria**: Platform dashboard displaying club metrics and activity
+
+---
+
+#### Phase 6.3: Club Management CRUD
+**Status**: NOT STARTED
+**Branch**: `phase-6-3-club-management`
+
+##### Core Tasks:
+- [ ] Build Admin::ClubsController with full CRUD operations
+- [ ] Create club listing view with search/filter/sort
+- [ ] Implement new club creation form with slug validation
+- [ ] Build edit club interface with all settings
+- [ ] Add soft delete functionality with confirmation
+- [ ] Auto-create club admin users when creating clubs
+- [ ] Implement audit logging for all operations
+- [ ] Write comprehensive CRUD tests
+
+**Completion Criteria**: Complete web-based club management interface
+
+---
+
+#### Phase 6.4: Migration & Polish
+**Status**: NOT STARTED
+**Branch**: `phase-6-4-migration-polish`
+
+##### Core Tasks:
+- [ ] Replace existing session-based club admin auth
+- [ ] Update RacesController to use new auth system
+- [ ] Remove old authentication code
+- [ ] Ensure backward compatibility for existing URLs
+- [ ] Polish UI with responsive design
+- [ ] Add Turbo Streams for real-time updates
+- [ ] Run full test suite and fix any issues
+- [ ] Deploy to production with Kamal
+
+**Completion Criteria**: New auth system fully integrated, tested, and deployed
+
+---
+
+## Future Phases (Planned)
+
+### Phase 7: Enhanced Club Features
+- Club branding and customization
+- Multiple admin users per club
+- Club-specific settings and preferences
+- Analytics dashboard for clubs
+
+### Phase 8: Volunteer Management Tool
+- New tool within BMXTools platform
+- Volunteer hour tracking
+- Schedule management
+- Integration with race management
+
+### Phase 9: Member Portal
+- Rider profiles and registration
+- Race history tracking
+- Points and rankings
+- Mobile app considerations
 
 ---
 
 ## Technical Requirements Checklist
 
-### Core Features:
-- [x] Dual independent counters (At Gate/In Staging) (UI implemented)
-- [x] Club-specific URLs: `bmxtools.com/[club-name]` (routing configured)
-- [ ] Real-time page updates (Stimulus controllers in progress)
-- [x] Mobile-first responsive design (implemented)
-- [x] Touch-optimized UI (44px+ touch targets) (implemented)
-- [ ] Race time settings (registration/start times) (models ready, UI pending)
-- [x] Admin reset functionality (implemented)
-- [x] Notification system with timers (models ready, UI implemented)
+### Core Features (Completed):
+- [x] Dual independent counters (At Gate/In Staging)
+- [x] Club-specific URLs: `bmxtools.com/[club-name]`
+- [x] Real-time page updates with Turbo Streams
+- [x] Mobile-first responsive design
+- [x] Touch-optimized UI (44px+ touch targets)
+- [x] Race time settings (registration/start times)
+- [x] Admin reset functionality
+- [x] Notification system with timers
 
-### Validation Rules:
-- [x] At Gate: min 0, must be < Staging (implemented in models)
-- [x] In Staging: min 0, must be ≥ At Gate (implemented in models)
-- [ ] Proper error handling and user feedback (UI pending)
+### Platform Features (In Progress):
+- [ ] User authentication system with bcrypt
+- [ ] Role-based authorization (super_admin, club_admin, club_operator)
+- [ ] Platform admin dashboard at `/admin`
+- [ ] Web-based club management (CRUD)
+- [ ] Audit logging for all admin actions
+- [ ] Unified login system at `/login`
 
 ### Technical Stack:
 - [x] Ruby on Rails 8+
 - [x] SQLite database
-- [x] Hotwire (no React)
+- [x] Hotwire (Turbo + Stimulus)
 - [x] Minitest (no RSpec)
-- [x] TailwindCSS for styling
-- [x] Mobile-first responsive design (implemented)
-
-### Visual Design:
-- [x] Color scheme implementation (red/orange counters) (implemented)
-- [x] Typography (Roboto font, 72px counter numbers) (implemented)
-- [x] Proper spacing and border radius (implemented)
-- [x] Touch-friendly button sizing (implemented)
+- [x] TailwindCSS v4
+- [x] Kamal deployment
+- [ ] bcrypt for authentication (Phase 6)
 
 ---
 
 ## Current Status
-**Active Phase**: Phase 4 - Real-time Updates & Polish
-**Next Milestone**: Enhanced real-time features and application polish
-**Current Branch**: `phase-3-admin-race-management` (ready for Phase 4)
+**Active Phase**: Phase 6.1 - Authentication Foundation
+**Next Milestone**: Platform admin authentication system
+**Current Branch**: main (preparing for phase-6-1-auth-foundation)
+**Production URL**: bmxtools.com
 
-### Phase Completion Summary:
-
-#### Phase 1: Database & Models ✅
-- ✅ All database models implemented and tested
-- ✅ 29 tests passing with 0 failures
-- ✅ Club-specific URL routing functional
-- ✅ Alberta BMX testing data integrated
-- ✅ Merged to main branch successfully
-
-#### Phase 2: Core Race Interface ✅
-- ✅ Mobile-first UI with dual counters implemented
-- ✅ Real-time updates with Hotwire/Turbo Streams
-- ✅ Touch-optimized controls and validation
-- ✅ Public race tracking interface complete
-
-#### Phase 3: Admin Race Management ✅
-- ✅ Admin authentication system with session management
-- ✅ Race time settings interface with real-time updates
-- ✅ Reset functionality with confirmation dialogs
-- ✅ Live notification system for admin users
-- ✅ Enhanced authorization controls and security
-- ✅ 41/42 tests passing (97.6% success rate)
+### Deployment Summary:
+- **Phases 1-5**: ✅ Complete and in production
+- **Phase 6**: 🚧 In active development
+- **Test Coverage**: 47 tests passing
+- **Production Sites**: 5 Alberta BMX clubs active
 
 ---
 
-*Last Updated: 2025-07-25 - Phase 3 Complete*
+*Last Updated: 2025-08-12 - Beginning Phase 6 Platform Administration*
