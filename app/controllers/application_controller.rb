@@ -16,4 +16,36 @@ class ApplicationController < ActionController::Base
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
   end
+
+  # Authentication helpers
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
+  def signed_in?
+    !!current_user
+  end
+
+  def require_authentication!
+    unless signed_in?
+      redirect_to login_path, alert: "Please sign in to continue"
+    end
+  end
+
+  def require_super_admin!
+    require_authentication!
+    unless current_user&.super_admin?
+      redirect_to root_path, alert: "Access denied"
+    end
+  end
+
+  def require_club_admin!(club)
+    require_authentication!
+    unless current_user&.admin_for?(club)
+      redirect_to root_path, alert: "Access denied"
+    end
+  end
+
+  # Make current_user available in views
+  helper_method :current_user, :signed_in?
 end
