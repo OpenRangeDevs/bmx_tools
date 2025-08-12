@@ -2,7 +2,10 @@ require "test_helper"
 
 class RaceTest < ActiveSupport::TestCase
   def setup
-    @edmonton_bmx = Club.create!(name: "Edmonton BMX Association", slug: "edmonton-bmx")
+    @edmonton_bmx = Club.create!(
+      name: "Edmonton BMX Association",
+      slug: "edmonton-bmx-#{SecureRandom.hex(4)}"
+    )
   end
 
   test "should create valid race with default values for pre-race setup" do

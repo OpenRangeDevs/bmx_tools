@@ -3,15 +3,27 @@ require "test_helper"
 class RacesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @club = Club.create!(
-      name: "Calgary BMX Association",
-      slug: "calgary-bmx"
+      name: "Test BMX Club",
+      slug: "test-bmx-club-#{SecureRandom.hex(4)}"
     )
   end
 
   private
 
   def authenticate_as_admin
-    post club_admin_login_path(@club.slug), params: { password: "admin123" }
+    # Create a club admin user for this club
+    user = User.create!(email: "admin@#{@club.slug}.com", password: "password123")
+    ToolPermission.create!(
+      user: user,
+      tool: "race_management",
+      role: "club_admin",
+      club: @club
+    )
+
+    post login_path, params: {
+      email: user.email,
+      password: "password123"
+    }
     follow_redirect!
   end
 
@@ -53,34 +65,29 @@ class RacesControllerTest < ActionDispatch::IntegrationTest
 
   test "admin routes require authentication" do
     get club_admin_url(@club.slug)
-    assert_redirected_to club_admin_login_path(@club.slug)
+    assert_redirected_to login_path
 
     patch club_race_update_url(@club.slug),
           params: { race: { at_gate: 1, in_staging: 2 } }
-    assert_redirected_to club_admin_login_path(@club.slug)
+    assert_redirected_to login_path
   end
 
   test "admin login with correct password" do
-    post club_admin_login_path(@club.slug), params: { password: "admin123" }
-    assert_redirected_to club_admin_path(@club.slug)
-    follow_redirect!
-    assert_response :success
+    skip "Legacy test - authentication now uses main login system"
   end
 
   test "admin login with incorrect password" do
-    post club_admin_login_path(@club.slug), params: { password: "wrong" }
-    assert_response :success
-    assert_match /Invalid password/, response.body
+    skip "Legacy test - authentication now uses main login system"
   end
 
   test "admin logout" do
     authenticate_as_admin
-    delete club_admin_logout_path(@club.slug)
-    assert_redirected_to club_path(@club.slug)
+    delete logout_path
+    assert_redirected_to root_path
 
     # Verify no longer authenticated
     get club_admin_url(@club.slug)
-    assert_redirected_to club_admin_login_path(@club.slug)
+    assert_redirected_to login_path
   end
 
   test "update race settings requires authentication" do
@@ -88,7 +95,7 @@ class RacesControllerTest < ActionDispatch::IntegrationTest
 
     patch club_race_settings_path(@club.slug),
           params: { race_setting: { race_start_time: 1.hour.from_now } }
-    assert_redirected_to club_admin_login_path(@club.slug)
+    assert_redirected_to login_path
   end
 
   test "update race settings with valid data" do
@@ -151,17 +158,6 @@ class RacesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "valid session refreshes login time" do
-    # Login as admin
-    post club_admin_login_path(@club.slug), params: { password: "admin123" }
-    original_login_time = Time.zone.parse(session[:admin_login_time])
-
-    # Wait a moment and access admin page
-    sleep(1)
-    get club_admin_url(@club.slug)
-    assert_response :success
-
-    # Session time should be updated
-    new_login_time = Time.zone.parse(session[:admin_login_time])
-    assert new_login_time > original_login_time, "Expected new login time #{new_login_time} to be greater than #{original_login_time}"
+    skip "Legacy test - session management changed in Phase 6"
   end
 end
