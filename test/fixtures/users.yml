@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+super_admin:
+  email: roger@openrangedevs.com
+  password_digest: <%= BCrypt::Password.create('roger123!') %>
+
+club_admin:
+  email: calgary.admin@bmxtools.com
+  password_digest: <%= BCrypt::Password.create('password123') %>
