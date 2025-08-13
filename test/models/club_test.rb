@@ -2,7 +2,7 @@ require "test_helper"
 
 class ClubTest < ActiveSupport::TestCase
   test "should create valid club with name and auto-generated slug" do
-    club = Club.new(name: "Calgary Olympic BMX Club")
+    club = Club.new(name: "Calgary Olympic BMX Club", location: "Calgary, AB", timezone: "Mountain Time (US & Canada)")
     assert club.valid?
     assert_equal "calgary-olympic-bmx-club", club.slug
   end
@@ -20,8 +20,8 @@ class ClubTest < ActiveSupport::TestCase
   end
 
   test "should enforce unique slug" do
-    Club.create!(name: "Red Deer BMX Association", slug: "red-deer-bmx")
-    club = Club.new(name: "Red Deer Racing Club", slug: "red-deer-bmx")
+    Club.create!(name: "Camrose BMX Track", slug: "camrose-bmx", location: "Camrose, AB", timezone: "Mountain Time (US & Canada)")
+    club = Club.new(name: "Camrose Racing Club", slug: "camrose-bmx", location: "Camrose, AB", timezone: "Mountain Time (US & Canada)")
     assert_not club.valid?
     assert_includes club.errors[:slug], "has already been taken"
   end
