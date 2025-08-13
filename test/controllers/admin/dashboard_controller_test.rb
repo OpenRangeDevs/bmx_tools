@@ -41,8 +41,8 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
 
   test "should display platform metrics" do
     # Create some test data
-    club1 = Club.create!(name: "Test Club 1", slug: "test-club-1")
-    club2 = Club.create!(name: "Test Club 2", slug: "test-club-2")
+    club1 = Club.create!(name: "Medicine Hat BMX", slug: "medicine-hat-bmx", location: "Medicine Hat, AB", timezone: "Mountain Time (US & Canada)")
+    club2 = Club.create!(name: "Grande Prairie BMX", slug: "grande-prairie-bmx", location: "Grande Prairie, AB", timezone: "Mountain Time (US & Canada)")
     race1 = club1.create_race!(at_gate: 1, in_staging: 2)
     race2 = club2.create_race!(at_gate: 0, in_staging: 1)
 
@@ -106,14 +106,14 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
 
   test "should display recent activity when available" do
     # Create a recent club
-    club = Club.create!(name: "Recent Club", slug: "recent-club")
+    club = Club.create!(name: "Fort Saskatchewan BMX", slug: "fort-saskatchewan-bmx", location: "Fort Saskatchewan, AB", timezone: "Mountain Time (US & Canada)")
 
     login_as_super_admin
     get admin_dashboard_path
 
     assert_response :success
     assert_match "Recent Activity", response.body
-    assert_match "New club created: Recent Club", response.body
+    assert_match "New club created: Fort Saskatchewan BMX", response.body
   end
 
   test "should handle no recent activity" do
