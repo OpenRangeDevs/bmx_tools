@@ -1,0 +1,468 @@
+<% content_for :title, "Club Settings - #{@club.name}" %>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <div class="border-b border-gray-200 pb-5 mb-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold leading-6 text-gray-900">Club Settings</h1>
+        <p class="mt-2 max-w-4xl text-sm text-gray-500">
+          Manage <%= @club.name %> settings, members, and ownership.
+        </p>
+      </div>
+      <div class="flex space-x-3">
+        <%= link_to admin_clubs_path, class: "inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" do %>
+          <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          Back to Clubs
+        <% end %>
+        <%= link_to club_path(@club), target: "_blank", class: "inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700" do %>
+          <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+          View Club Page
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="border-b border-gray-200 mb-8">
+    <nav class="-mb-px flex space-x-8">
+      <button type="button" onclick="showTab('general')"
+              class="tab-button active whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              data-tab="general">
+        General Settings
+      </button>
+      <button type="button" onclick="showTab('members')"
+              class="tab-button whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              data-tab="members">
+        Members
+      </button>
+      <% if current_user.super_admin? || @club.owned_by?(current_user) %>
+        <button type="button" onclick="showTab('ownership')"
+                class="tab-button whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+                data-tab="ownership">
+          Ownership
+        </button>
+      <% end %>
+      <button type="button" onclick="showTab('danger')"
+              class="tab-button whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+              data-tab="danger">
+        Danger Zone
+      </button>
+    </nav>
+  </div>
+
+  <!-- General Settings Tab -->
+  <div id="general-tab" class="tab-content">
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">General Settings</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Update club information, logo, and basic settings.
+        </p>
+      </div>
+
+      <%= form_with(model: [@club], url: admin_club_settings_update_general_path(@club), method: :patch, class: "space-y-6 p-6") do |form| %>
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <!-- Club Logo -->
+          <div class="sm:col-span-6">
+            <%= form.label :logo, class: "block text-sm font-medium text-gray-700" %>
+            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+              <div class="space-y-1 text-center">
+                <% if @club.has_logo? %>
+                  <div class="mb-4">
+                    <%= image_tag @club.logo.variant(:thumb), class: "mx-auto h-32 w-32 object-cover rounded-lg", alt: "#{@club.name} logo" %>
+                  </div>
+                <% else %>
+                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                <% end %>
+                <div class="flex text-sm text-gray-600">
+                  <%= form.file_field :logo, class: "sr-only", accept: "image/png,image/jpg,image/jpeg,image/webp", onchange: "previewLogo(this)" %>
+                  <label for="<%= form.field_id(:logo) %>" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                    <span><%= @club.has_logo? ? "Change logo" : "Upload a logo" %></span>
+                  </label>
+                </div>
+                <p class="text-xs text-gray-500">
+                  PNG, JPG, JPEG, WEBP up to 5MB. Will be resized to 120x120px.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Club Name -->
+          <div class="sm:col-span-4">
+            <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+            <% if @club.errors[:name].any? %>
+              <p class="mt-2 text-sm text-red-600"><%= @club.errors[:name].first %></p>
+            <% end %>
+          </div>
+
+          <!-- Club Slug -->
+          <div class="sm:col-span-2">
+            <%= form.label :slug, "URL Slug", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :slug, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md #{'bg-gray-100' if @club.race.present?}", readonly: @club.race.present? %>
+            <% if @club.race.present? %>
+              <p class="mt-2 text-sm text-gray-500">Slug cannot be changed when club has races</p>
+            <% end %>
+            <% if @club.errors[:slug].any? %>
+              <p class="mt-2 text-sm text-red-600"><%= @club.errors[:slug].first %></p>
+            <% end %>
+          </div>
+
+          <!-- Location -->
+          <div class="sm:col-span-3">
+            <%= form.label :location, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :location, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+          </div>
+
+          <!-- Timezone -->
+          <div class="sm:col-span-3">
+            <%= form.label :timezone, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.select :timezone, options_from_collection_for_select(ActiveSupport::TimeZone.all, :name, :name, @club.timezone),
+                            { prompt: "Select a timezone" },
+                            { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+          </div>
+
+          <!-- Website URL -->
+          <div class="sm:col-span-3">
+            <%= form.label :website_url, "Website URL", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.url_field :website_url, placeholder: "https://www.example.com", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+            <% if @club.errors[:website_url].any? %>
+              <p class="mt-2 text-sm text-red-600"><%= @club.errors[:website_url].first %></p>
+            <% end %>
+          </div>
+
+          <!-- Description -->
+          <div class="sm:col-span-6">
+            <%= form.label :description, class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_area :description, rows: 4, placeholder: "Describe your club, its history, mission, or any other information...", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <%= form.submit "Update Settings", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Members Tab -->
+  <div id="members-tab" class="tab-content hidden">
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Club Members</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Manage users who have access to this club.
+        </p>
+      </div>
+
+      <div class="p-6">
+        <!-- Add Member Form -->
+        <div class="mb-8 p-4 bg-gray-50 rounded-lg">
+          <h4 class="text-md font-medium text-gray-900 mb-4">Add New Member</h4>
+          <%= form_with url: admin_club_settings_add_member_path(@club), method: :post, class: "flex space-x-4" do |form| %>
+            <div class="flex-1">
+              <%= form.email_field :email, placeholder: "user@example.com", class: "block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" %>
+            </div>
+            <div>
+              <%= form.select :role, [["Club Admin", "club_admin"], ["Club Operator", "club_operator"]],
+                              { prompt: "Select role" },
+                              { class: "block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+            </div>
+            <div>
+              <%= form.submit "Add Member", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700" %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Current Members List -->
+        <div class="flow-root">
+          <ul role="list" class="-my-5 divide-y divide-gray-200">
+            <% @club_members.each do |member| %>
+              <% permission = member.tool_permissions.find { |p| p.club == @club && p.tool == "race_management" } %>
+              <li class="py-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                      <div class="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center">
+                        <span class="text-white font-medium text-sm">
+                          <%= member.email.first.upcase %>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-900"><%= member.email %></p>
+                      <p class="text-sm text-gray-500">
+                        <%= permission.role.humanize %>
+                        <% if @club.owned_by?(member) %>
+                          <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            Owner
+                          </span>
+                        <% end %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <% unless @club.owned_by?(member) %>
+                      <%= form_with url: admin_club_settings_update_member_path(@club), method: :patch, class: "flex items-center space-x-2" do |form| %>
+                        <%= form.hidden_field :user_id, value: member.id %>
+                        <%= form.select :role, [["Club Admin", "club_admin"], ["Club Operator", "club_operator"]],
+                                        { selected: permission.role },
+                                        { class: "text-sm border-gray-300 rounded-md", onchange: "this.form.submit()" } %>
+                      <% end %>
+                      <%= form_with url: admin_club_settings_remove_member_path(@club), method: :delete, confirm: "Are you sure you want to remove #{member.email} from this club?", class: "ml-2" do |form| %>
+                        <%= form.hidden_field :user_id, value: member.id %>
+                        <%= form.submit "Remove", class: "text-sm text-red-600 hover:text-red-900" %>
+                      <% end %>
+                    <% else %>
+                      <span class="text-sm text-gray-400">Club Owner</span>
+                    <% end %>
+                  </div>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership Tab -->
+  <% if current_user.super_admin? || @club.owned_by?(current_user) %>
+    <div id="ownership-tab" class="tab-content hidden">
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg leading-6 font-medium text-gray-900">Club Ownership</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            Transfer club ownership to another user.
+          </p>
+        </div>
+
+        <div class="p-6">
+          <!-- Current Owner -->
+          <div class="mb-8">
+            <h4 class="text-md font-medium text-gray-900 mb-2">Current Owner</h4>
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center">
+                  <span class="text-white font-medium text-sm">
+                    <%= @club.owner_user&.email&.first&.upcase || "N" %>
+                  </span>
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-900">
+                  <%= @club.owner_user&.email || "No owner assigned" %>
+                </p>
+                <p class="text-sm text-gray-500">Club Owner</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Transfer -->
+          <% if @pending_transfer %>
+            <div class="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <h3 class="text-sm font-medium text-yellow-800">
+                    Ownership Transfer Pending
+                  </h3>
+                  <div class="mt-2 text-sm text-yellow-700">
+                    <p>Transfer to: <strong><%= @pending_transfer.to_user_email %></strong></p>
+                    <p>Expires in: <%= @pending_transfer.days_until_expiry %> day(s)</p>
+                    <p>Initiated by: <%= @pending_transfer.from_user.email %></p>
+                  </div>
+                  <div class="mt-4">
+                    <%= form_with url: admin_club_settings_cancel_transfer_path(@club), method: :delete, confirm: "Are you sure you want to cancel this transfer?" do |form| %>
+                      <%= form.submit "Cancel Transfer", class: "text-sm bg-white border border-yellow-300 text-yellow-700 hover:bg-yellow-50 px-3 py-1 rounded-md" %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <!-- Transfer Ownership Form -->
+            <div class="p-4 bg-gray-50 rounded-lg">
+              <h4 class="text-md font-medium text-gray-900 mb-4">Transfer Ownership</h4>
+              <p class="text-sm text-gray-600 mb-4">
+                Transfer ownership to another user. They will receive an email to accept the transfer.
+              </p>
+              <%= form_with url: admin_club_settings_initiate_transfer_path(@club), method: :post, class: "flex space-x-4" do |form| %>
+                <div class="flex-1">
+                  <%= form.email_field :to_user_email, placeholder: "newowner@example.com", class: "block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" %>
+                </div>
+                <div>
+                  <%= form.submit "Transfer Ownership", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700", confirm: "Are you sure you want to transfer ownership of this club? This action cannot be undone once accepted." %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Danger Zone Tab -->
+  <div id="danger-tab" class="tab-content hidden">
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Danger Zone</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Irreversible and destructive actions.
+        </p>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <!-- Soft Delete -->
+        <% if !@club.deleted? %>
+          <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3 flex-1">
+                <h3 class="text-sm font-medium text-red-800">Delete Club</h3>
+                <div class="mt-2 text-sm text-red-700">
+                  <p>This will hide the club from public view and prevent race management. Can be restored by platform administrators.</p>
+                </div>
+                <div class="mt-4">
+                  <%= form_with url: admin_club_settings_soft_delete_path(@club), method: :patch, confirm: "Are you sure you want to delete '#{@club.name}'? This will stop all race tracking and hide the club." do |form| %>
+                    <%= form.submit "Delete Club", class: "bg-red-600 border border-transparent rounded-md py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-red-700" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <!-- Restore Club -->
+          <% if current_user.super_admin? %>
+            <div class="rounded-md bg-green-50 p-4">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                  <h3 class="text-sm font-medium text-green-800">Restore Club</h3>
+                  <div class="mt-2 text-sm text-green-700">
+                    <p>This club has been deleted. Restore it to make it active again.</p>
+                  </div>
+                  <div class="mt-4">
+                    <%= form_with url: admin_club_settings_restore_path(@club), method: :patch, confirm: "Are you sure you want to restore '#{@club.name}'?" do |form| %>
+                      <%= form.submit "Restore Club", class: "bg-green-600 border border-transparent rounded-md py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-green-700" %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+        <!-- Hard Delete (Super Admin Only) -->
+        <% if current_user.super_admin? %>
+          <div class="rounded-md bg-red-100 p-4 border-2 border-red-300">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3 flex-1">
+                <h3 class="text-sm font-medium text-red-800">Permanently Delete Club</h3>
+                <div class="mt-2 text-sm text-red-700">
+                  <p><strong>Warning:</strong> This action cannot be undone. All club data, races, and history will be permanently deleted.</p>
+                </div>
+                <div class="mt-4">
+                  <%= form_with url: admin_club_settings_hard_delete_path(@club), method: :delete, confirm: "WARNING: This will PERMANENTLY DELETE '#{@club.name}' and ALL associated data. This cannot be undone. Type the club name to confirm." do |form| %>
+                    <%= form.submit "PERMANENTLY DELETE", class: "bg-red-700 border border-red-800 rounded-md py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-red-800" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tab Switching JavaScript -->
+<script>
+  function showTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.add('hidden');
+    });
+
+    // Remove active state from all buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.classList.remove('active', 'border-indigo-500', 'text-indigo-600');
+      button.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+    });
+
+    // Show selected tab
+    document.getElementById(tabName + '-tab').classList.remove('hidden');
+
+    // Add active state to selected button
+    const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+    activeButton.classList.add('active', 'border-indigo-500', 'text-indigo-600');
+    activeButton.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+  }
+
+  // Initialize first tab as active
+  document.addEventListener('DOMContentLoaded', function() {
+    showTab('general');
+  });
+
+  // Logo preview function
+  function previewLogo(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Find or create preview image
+        const container = input.closest('.border-dashed');
+        let img = container.querySelector('img');
+        if (!img) {
+          img = document.createElement('img');
+          img.className = 'mx-auto h-32 w-32 object-cover rounded-lg';
+          img.alt = 'Logo preview';
+          // Replace the SVG
+          const svg = container.querySelector('svg');
+          svg.parentNode.replaceChild(img, svg);
+        }
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+
+<!-- CSS for tab styling -->
+<style>
+  .tab-button.active {
+    border-color: #4f46e5;
+    color: #4f46e5;
+  }
+  .tab-button:not(.active) {
+    border-color: transparent;
+    color: #6b7280;
+  }
+  .tab-button:not(.active):hover {
+    color: #374151;
+    border-color: #d1d5db;
+  }
+</style>
