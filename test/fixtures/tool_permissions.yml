@@ -10,4 +10,4 @@ club_admin_permission:
   user: club_admin
   tool: 0  # race_management
   role: 1  # club_admin
-  club: calgary_bmx
+  club: airdrie_bmx
