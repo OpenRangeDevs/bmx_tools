@@ -9,14 +9,14 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
   def login_as_super_admin
     post login_path, params: {
       email: @super_admin.email,
-      password: "roger123!"
+      password: TEST_PASSWORD
     }
   end
 
   def login_as_club_admin
     post login_path, params: {
       email: @club_admin.email,
-      password: "password123"
+      password: TEST_PASSWORD
     }
   end
 
