@@ -14,9 +14,11 @@ Rails.application.routes.draw do
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
 
-  # Platform Admin routes (super_admin only) - will be implemented in Phase 6.2
-  get "/admin", to: redirect("/admin/dashboard")
-  get "/admin/dashboard", to: "admin/dashboard#index", as: :admin_dashboard
+  # Platform Admin routes (super_admin only)
+  namespace :admin do
+    root "dashboard#index"
+    get "/dashboard", to: "dashboard#index"
+  end
 
   # Club-specific routes (bmxtools.com/[club-name])
   constraints(club_slug: /[a-z0-9\-]+/) do
