@@ -6,8 +6,9 @@ class Admin::ClubsController < Admin::BaseController
 
     # Search functionality
     if params[:search].present?
-      @clubs = @clubs.where("name ILIKE ? OR location ILIKE ? OR slug ILIKE ?",
-                           "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")
+      search_term = "%#{params[:search]}%"
+      @clubs = @clubs.where("name LIKE ? OR location LIKE ? OR slug LIKE ?",
+                           search_term, search_term, search_term)
     end
 
     # Filter by status
