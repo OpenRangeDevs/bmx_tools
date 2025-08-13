@@ -3,7 +3,7 @@ class Admin::Clubs::SettingsController < ApplicationController
   before_action :set_club
   before_action :authorize_club_access!
 
-  def index
+  def show
     @pending_transfer = @club.ownership_transfers.active.first
     @club_members = @club.users.joins(:tool_permissions)
                          .where(tool_permissions: { tool: "race_management", club: @club })
@@ -18,7 +18,7 @@ class Admin::Clubs::SettingsController < ApplicationController
       @club_members = @club.users.joins(:tool_permissions)
                            .where(tool_permissions: { tool: "race_management", club: @club })
                            .includes(:tool_permissions)
-      render :index, status: :unprocessable_entity
+      render :show, status: :unprocessable_entity
     end
   end
 

@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   # Platform Admin routes (super_admin only)
   namespace :admin do
     resources :clubs do
-      resource :settings, only: [ :index ] do
+      resource :settings, only: [ :show ], controller: "clubs/settings" do
         patch :update_general
         post :add_member
         patch :update_member
