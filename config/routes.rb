@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   # Platform Admin routes (super_admin only)
   namespace :admin do
+    resources :clubs
     root "dashboard#index"
     get "/dashboard", to: "dashboard#index"
   end
