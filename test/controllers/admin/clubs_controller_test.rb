@@ -17,7 +17,7 @@ class Admin::ClubsControllerTest < ActionDispatch::IntegrationTest
   def login_as_club_admin
     post login_path, params: {
       email: @club_admin.email,
-      password: "password123"
+      password: "roger123!"
     }
   end
 
