@@ -6,4 +6,4 @@ super_admin:
 
 club_admin:
   email: calgary.admin@bmxtools.com
-  password_digest: <%= BCrypt::Password.create('password123') %>
+  password_digest: <%= BCrypt::Password.create('roger123!') %>

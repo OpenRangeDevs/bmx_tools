@@ -53,19 +53,19 @@ class UserTest < ActiveSupport::TestCase
 
   test "admin_for? should return true for club admin of specific club" do
     user = users(:club_admin)
-    club = clubs(:calgary_bmx)
+    club = clubs(:airdrie_bmx)
     assert user.admin_for?(club)
   end
 
   test "admin_for? should return true for super admin for any club" do
     user = users(:super_admin)
-    club = clubs(:calgary_bmx)
+    club = clubs(:airdrie_bmx)
     assert user.admin_for?(club)
   end
 
   test "admin_for? should return false for non-admin user" do
     user = User.create!(email: "regular@example.com", password: "password123")
-    club = clubs(:calgary_bmx)
+    club = clubs(:airdrie_bmx)
     assert_not user.admin_for?(club)
   end
 

@@ -9,7 +9,7 @@ class Admin::BaseControllerTest < ActionDispatch::IntegrationTest
 
   test "should require super admin role" do
     user = users(:club_admin)
-    post login_path, params: { email: user.email, password: "password123" }
+    post login_path, params: { email: user.email, password: TEST_PASSWORD }
 
     get admin_root_path
     assert_redirected_to root_path
@@ -18,7 +18,7 @@ class Admin::BaseControllerTest < ActionDispatch::IntegrationTest
 
   test "should allow super admin access" do
     user = users(:super_admin)
-    post login_path, params: { email: user.email, password: "roger123!" }
+    post login_path, params: { email: user.email, password: TEST_PASSWORD }
 
     get admin_root_path
     assert_response :success

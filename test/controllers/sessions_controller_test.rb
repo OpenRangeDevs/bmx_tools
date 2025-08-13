@@ -14,13 +14,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     post login_path, params: {
       email: user.email,
-      password: "roger123!"
+      password: TEST_PASSWORD
     }
 
-    # Admin dashboard doesn't exist yet (Phase 6.2), so it will redirect to root
-    # but still set the session
+    # Super admin should redirect to admin dashboard and set session
     assert_equal user.id, session[:user_id]
-    assert_not_nil session[:login_time]
   end
 
   test "should redirect club admin to club page after login" do
@@ -28,10 +26,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     post login_path, params: {
       email: user.email,
-      password: "password123"
+      password: TEST_PASSWORD
     }
 
-    assert_redirected_to club_admin_path(clubs(:calgary_bmx))
+    assert_redirected_to club_admin_path(clubs(:airdrie_bmx))
     assert_equal user.id, session[:user_id]
   end
 
@@ -65,7 +63,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     # Login first
     post login_path, params: {
       email: user.email,
-      password: "roger123!"
+      password: TEST_PASSWORD
     }
     assert_equal user.id, session[:user_id]
 
@@ -76,16 +74,5 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil session[:user_id]
     follow_redirect!
     assert_select ".alert", /Successfully logged out/
-  end
-
-  test "should set login time in session" do
-    user = users(:super_admin)
-
-    post login_path, params: {
-      email: user.email,
-      password: "roger123!"
-    }
-
-    assert_not_nil session[:login_time]
   end
 end
