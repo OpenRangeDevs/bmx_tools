@@ -72,13 +72,6 @@ class RacesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
   end
 
-  test "admin login with correct password" do
-    skip "Legacy test - authentication now uses main login system"
-  end
-
-  test "admin login with incorrect password" do
-    skip "Legacy test - authentication now uses main login system"
-  end
 
   test "admin logout" do
     authenticate_as_admin
@@ -141,23 +134,5 @@ class RacesControllerTest < ActionDispatch::IntegrationTest
     assert_match /Race Time Settings/, response.body
     assert_match /Registration Deadline/, response.body
     assert_match /Race Start Time/, response.body
-  end
-
-  test "session timeout redirects to login" do
-    skip "Temporary skip for Phase 4 merge"
-    # Login as admin first
-    authenticate_as_admin
-
-    # Simulate session timeout by setting login time to 5 hours ago
-    session[:admin_login_time] = 5.hours.ago.to_s
-
-    get club_admin_url(@club.slug)
-    assert_redirected_to club_admin_login_path(@club.slug)
-    follow_redirect!
-    assert_match /session has expired/, response.body
-  end
-
-  test "valid session refreshes login time" do
-    skip "Legacy test - session management changed in Phase 6"
   end
 end

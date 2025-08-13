@@ -1,0 +1,162 @@
+<% content_for :title, "Add New Club" %>
+
+<div class="min-h-screen bg-gray-50 p-4">
+  <!-- Header -->
+  <div class="bg-white shadow-sm rounded-lg mb-6 p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Add New Club</h1>
+        <p class="text-gray-600 mt-1">Create a new BMX club on the platform</p>
+      </div>
+      <%= link_to admin_clubs_path,
+          class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" do %>
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Clubs
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="bg-white shadow-sm rounded-lg p-6" data-controller="slug">
+    <%= form_with model: [:admin, @club], local: true, class: "space-y-6" do |form| %>
+      <% if @club.errors.any? %>
+        <div class="rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">
+                There were <%= pluralize(@club.errors.count, "error") %> with your submission:
+              </h3>
+              <div class="mt-2 text-sm text-red-700">
+                <ul class="list-disc pl-5 space-y-1">
+                  <% @club.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Club Information -->
+        <div class="space-y-6">
+          <h3 class="text-lg font-medium text-gray-900">Club Information</h3>
+
+          <div>
+            <%= form.label :name, "Club Name", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :name,
+                required: true,
+                placeholder: "Calgary BMX Club",
+                data: { slug_target: "name", action: "input->slug#updateSlug" },
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">The full name of the BMX club</p>
+          </div>
+
+          <div>
+            <%= form.label :slug, "URL Slug", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :slug,
+                placeholder: "calgary-bmx-club",
+                data: { slug_target: "slug", action: "input->slug#updatePreview" },
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">URL-friendly identifier (will auto-generate from club name if blank)</p>
+            <div class="mt-1 text-xs text-gray-500">
+              Preview: <code class="bg-gray-100 px-1 rounded">bmxtools.com/<span data-slug-target="preview">your-club-slug</span></code>
+            </div>
+          </div>
+
+          <div>
+            <%= form.label :location, "Location", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_field :location,
+                required: true,
+                placeholder: "Calgary, AB",
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">City and province/state</p>
+          </div>
+
+          <div>
+            <%= form.label :contact_email, "Contact Email", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.email_field :contact_email,
+                placeholder: "info@calgaryexampleclub.com",
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">Public contact email for the club (optional)</p>
+          </div>
+
+          <div>
+            <%= form.label :timezone, "Time Zone", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.select :timezone,
+                options_for_select(
+                  ActiveSupport::TimeZone.all.map { |tz| [tz.to_s, tz.name] },
+                  "America/Edmonton"
+                ),
+                {},
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">Time zone for race scheduling</p>
+          </div>
+        </div>
+
+        <!-- Admin User Information -->
+        <div class="space-y-6">
+          <h3 class="text-lg font-medium text-gray-900">Club Administrator</h3>
+          <p class="text-sm text-gray-600">Create an admin user who can manage races for this club</p>
+
+          <div>
+            <%= label_tag :admin_email, "Admin Email", class: "block text-sm font-medium text-gray-700" %>
+            <%= email_field_tag :admin_email,
+                params[:admin_email],
+                placeholder: "admin@calgaryexampleclub.com",
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">Email address for the club admin user</p>
+          </div>
+
+          <div>
+            <%= label_tag :admin_password, "Admin Password", class: "block text-sm font-medium text-gray-700" %>
+            <%= password_field_tag :admin_password,
+                params[:admin_password],
+                placeholder: "Leave blank to auto-generate",
+                class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+            <p class="mt-1 text-sm text-gray-500">Password for the admin user (will generate secure password if blank)</p>
+          </div>
+
+          <div class="rounded-md bg-blue-50 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">
+                  Admin User Creation
+                </h3>
+                <div class="mt-2 text-sm text-blue-700">
+                  <p>The admin user will be able to:</p>
+                  <ul class="list-disc pl-5 mt-1 space-y-1">
+                    <li>Access the club's race management interface</li>
+                    <li>Update race counters and settings</li>
+                    <li>Reset races and manage time settings</li>
+                  </ul>
+                  <p class="mt-2">After creation, you'll see the login credentials to share with the club.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-6 border-t">
+        <%= link_to "Cancel", admin_clubs_path,
+            class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
+        <%= form.submit "Create Club",
+            class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700" %>
+      </div>
+    <% end %>
+  </div>
+</div>

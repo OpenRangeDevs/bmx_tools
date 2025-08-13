@@ -26,33 +26,41 @@ puts "Creating Alberta BMX test data..."
 alberta_clubs = [
   {
     name: "Calgary BMX Association",
-    slug: "calgary-bmx"
+    slug: "calgary-bmx",
+    location: "Calgary, AB"
   },
   {
     name: "Edmonton BMX Club",
-    slug: "edmonton-bmx"
+    slug: "edmonton-bmx",
+    location: "Edmonton, AB"
   },
   {
     name: "Red Deer BMX",
-    slug: "red-deer-bmx"
+    slug: "red-deer-bmx",
+    location: "Red Deer, AB"
   },
   {
     name: "Lethbridge BMX Track",
-    slug: "lethbridge-bmx"
+    slug: "lethbridge-bmx",
+    location: "Lethbridge, AB"
   },
   {
     name: "Medicine Hat BMX",
-    slug: "medicine-hat-bmx"
+    slug: "medicine-hat-bmx",
+    location: "Medicine Hat, AB"
   },
   {
     name: "Airdrie BMX",
-    slug: "airdrie-bmx"
+    slug: "airdrie-bmx",
+    location: "Airdrie, AB"
   }
 ]
 
 alberta_clubs.each do |club_data|
   club = Club.find_or_create_by(slug: club_data[:slug]) do |c|
     c.name = club_data[:name]
+    c.location = club_data[:location]
+    c.timezone = "Mountain Time (US & Canada)"
   end
 
   puts "✅ Created/found club: #{club.name} (#{club.slug})"

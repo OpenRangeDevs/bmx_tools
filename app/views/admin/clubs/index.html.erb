@@ -1,0 +1,183 @@
+<% content_for :title, "Clubs Management" %>
+
+<div class="min-h-screen bg-gray-50 p-4">
+  <!-- Header -->
+  <div class="bg-white shadow-sm rounded-lg mb-6 p-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Clubs Management</h1>
+        <p class="text-gray-600 mt-1">Manage all BMX clubs on the platform</p>
+      </div>
+      <div class="text-right">
+        <p class="text-sm text-gray-600">Logged in as</p>
+        <p class="font-medium text-gray-900"><%= current_user.email %></p>
+        <%= link_to "Logout", logout_path, method: :delete,
+            class: "text-sm text-red-600 hover:text-red-800" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Navigation -->
+  <div class="bg-white shadow-sm rounded-lg mb-6 p-4">
+    <nav class="flex space-x-6">
+      <%= link_to "Dashboard", admin_dashboard_path,
+          class: "px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md" %>
+      <%= link_to "Clubs", admin_clubs_path,
+          class: "px-3 py-2 text-sm font-medium text-orange-600 bg-orange-50 rounded-md" %>
+      <%= link_to "Settings", "#",
+          class: "px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md" %>
+    </nav>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="bg-white shadow-sm rounded-lg mb-6 p-6">
+    <%= form_with url: admin_clubs_path, method: :get, local: true, class: "flex flex-col md:flex-row gap-4 items-end" do |form| %>
+      <div class="flex-1">
+        <%= form.label :search, "Search clubs", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :search,
+            value: params[:search],
+            placeholder: "Search by name, location, or slug...",
+            class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :status,
+            options_for_select([
+              ['All Clubs', ''],
+              ['Active Only', 'active'],
+              ['Deleted Only', 'deleted']
+            ], params[:status]),
+            {},
+            class: "block rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" %>
+      </div>
+
+      <div class="flex gap-2">
+        <%= form.submit "Search",
+            class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700" %>
+        <%= link_to "Clear", admin_clubs_path,
+            class: "inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Add New Club Button -->
+  <div class="mb-6">
+    <%= link_to new_admin_club_path,
+        class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700" do %>
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Add New Club
+    <% end %>
+  </div>
+
+  <!-- Clubs Table -->
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to "Club Name", admin_clubs_path(sort: 'name', direction: params[:direction] == 'asc' ? 'desc' : 'asc', search: params[:search], status: params[:status]),
+                  class: "hover:text-gray-700" %>
+              <% if params[:sort] == 'name' %>
+                <span class="ml-1"><%= params[:direction] == 'asc' ? '↑' : '↓' %></span>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Slug
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <%= link_to "Location", admin_clubs_path(sort: 'location', direction: params[:direction] == 'asc' ? 'desc' : 'asc', search: params[:search], status: params[:status]),
+                  class: "hover:text-gray-700" %>
+              <% if params[:sort] == 'location' %>
+                <span class="ml-1"><%= params[:direction] == 'asc' ? '↑' : '↓' %></span>
+              <% end %>
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Status
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Race Status
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% @clubs.each do |club| %>
+            <tr class="<%= 'bg-red-50' if club.deleted? %>">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">
+                  <%= link_to club.name, admin_club_path(club), class: "hover:text-orange-600" %>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <code class="bg-gray-100 px-2 py-1 rounded text-xs"><%= club.slug %></code>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <%= club.location %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if club.deleted? %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    Deleted
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Active
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <% if club.race %>
+                  Gate: <%= club.race.at_gate %> | Staging: <%= club.race.in_staging %>
+                <% else %>
+                  No race
+                <% end %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                <%= link_to "View", admin_club_path(club),
+                    class: "text-orange-600 hover:text-orange-900" %>
+                <%= link_to "Edit", edit_admin_club_path(club),
+                    class: "text-blue-600 hover:text-blue-900" %>
+                <% unless club.deleted? %>
+                  <%= link_to "Delete", admin_club_path(club), method: :delete,
+                      data: { confirm: "Are you sure you want to delete #{club.name}?" },
+                      class: "text-red-600 hover:text-red-900" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @clubs.empty? %>
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2"></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No clubs found</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          <% if params[:search].present? || params[:status].present? %>
+            Try adjusting your search or filter criteria.
+          <% else %>
+            Get started by creating a new club.
+          <% end %>
+        </p>
+        <div class="mt-6">
+          <%= link_to new_admin_club_path,
+              class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700" do %>
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Add New Club
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

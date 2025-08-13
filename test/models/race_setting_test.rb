@@ -2,8 +2,8 @@ require "test_helper"
 
 class RaceSettingTest < ActiveSupport::TestCase
   def setup
-    @red_deer_bmx = Club.create!(name: "Red Deer BMX Association", slug: "red-deer-bmx")
-    @provincial_race = @red_deer_bmx.create_race!(at_gate: 0, in_staging: 3)
+    @lloydminster_bmx = Club.create!(name: "Lloydminster BMX Club", slug: "lloydminster-bmx", location: "Lloydminster, AB", timezone: "Mountain Time (US & Canada)")
+    @provincial_race = @lloydminster_bmx.create_race!(at_gate: 0, in_staging: 3)
   end
 
   test "should create valid race day settings with typical race schedule" do
