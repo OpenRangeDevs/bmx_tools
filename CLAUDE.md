@@ -11,7 +11,7 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - `@docs/master_task_list.md` - Master project roadmap with all phases and technical requirements
 
 ### 🚀 Current Phase Information  
-- `@docs/phases/phase-6-1-auth-foundation.md` - Current phase: Platform admin authentication
+- `@docs/phases/phase-6-4-migration-polish.md` - Current phase: Migration & Polish
 - `@docs/memories.md` - Project procedures, preferences, and development history
 
 ## Key Project Constraints
@@ -72,9 +72,9 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - Test data must reflect authentic BMX racing scenarios (gate numbers, moto progression, etc.)
 
 ## Current Status
-- **Phase**: 6.1 - Authentication Foundation 🚧 IN PROGRESS
-- **Branch**: `main` (preparing for `phase-6-1-auth-foundation`)
-- **Next Milestone**: Platform admin authentication system
+- **Phase**: 6.4 - Migration & Polish 🚧 IN PROGRESS
+- **Branch**: `phase-6-4-migration-polish`
+- **Next Milestone**: Complete Phase 6 platform administration
 
 ## Key Business Rules
 1. **At Gate Counter**: min 0, must be < In Staging
@@ -89,11 +89,11 @@ BMX Race Tracker - A mobile-first web application for tracking BMX race moto pro
 - Communicate clearly about testing procedures
 
 ---
-**Last Updated**: 2025-08-12  
-**Current Phase**: Phase 6.1 - Authentication Foundation 🚧
+**Last Updated**: 2025-08-13
+**Current Phase**: Phase 6.4 - Migration & Polish 🚧
 **Phase 1**: ✅ COMPLETE (Database & Models - merged to main)
 **Phase 2**: ✅ COMPLETE (Core race interface with dual counters)
 **Phase 3**: ✅ COMPLETE (Admin authentication & management)
 **Phase 4**: ✅ COMPLETE (Real-time updates & mobile polish)
 **Phase 5**: ✅ COMPLETE (Testing & deployment - IN PRODUCTION)
-**Phase 6**: 🚧 IN PROGRESS (Platform Administration - 4 sub-phases)
+**Phase 6**: 🚧 IN PROGRESS (Platform Administration - Phase 6.4 final phase)
