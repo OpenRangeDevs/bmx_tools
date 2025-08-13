@@ -3,20 +3,30 @@
 calgary_bmx:
   name: Calgary BMX Association
   slug: calgary-bmx
+  location: Calgary, AB
+  timezone: Mountain Time (US & Canada)
 
 edmonton_bmx:
   name: Edmonton BMX Club
   slug: edmonton-bmx
+  location: Edmonton, AB
+  timezone: Mountain Time (US & Canada)
 
 airdrie_bmx:
   name: Airdrie BMX
   slug: airdriebmx
+  location: Airdrie, AB
+  timezone: Mountain Time (US & Canada)
 
-# Keep existing ones for compatibility
-one:
-  name: Test Club One
-  slug: test-club-one
+# Additional Alberta BMX clubs for testing
+red_deer_bmx:
+  name: Red Deer BMX Association
+  slug: red-deer-bmx
+  location: Red Deer, AB
+  timezone: Mountain Time (US & Canada)
 
-two:
-  name: Test Club Two
-  slug: test-club-two
+lethbridge_bmx:
+  name: Lethbridge BMX Track
+  slug: lethbridge-bmx
+  location: Lethbridge, AB
+  timezone: Mountain Time (US & Canada)
