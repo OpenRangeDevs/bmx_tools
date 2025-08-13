@@ -152,20 +152,39 @@ Mobile-first BMX race tracking web application evolving into a comprehensive BMX
 ---
 
 #### Phase 6.4: Migration & Polish
-**Status**: NOT STARTED
-**Branch**: `phase-6-4-migration-polish`
+**Status**: ✅ COMPLETE
+**Branch**: `phase-6-4-migration-polish` (merged to main)
 
 ##### Core Tasks:
-- [ ] Replace existing session-based club admin auth
-- [ ] Update RacesController to use new auth system
-- [ ] Remove old authentication code
-- [ ] Ensure backward compatibility for existing URLs
-- [ ] Polish UI with responsive design
-- [ ] Add Turbo Streams for real-time updates
-- [ ] Run full test suite and fix any issues
-- [ ] Deploy to production with Kamal
+- [x] Replace existing session-based club admin auth
+- [x] Update RacesController to use new auth system
+- [x] Remove old authentication code
+- [x] Ensure backward compatibility for existing URLs
+- [x] Polish UI with responsive design
+- [x] Add Turbo Streams for real-time updates
+- [x] Run full test suite and fix any issues
+- [x] Deploy to production with Kamal
 
-**Completion Criteria**: New auth system fully integrated, tested, and deployed
+**Completion Criteria**: ✅ New auth system fully integrated, tested, and deployed
+
+---
+
+#### Phase 6.5: Club Settings Management
+**Status**: NOT STARTED
+**Branch**: `phase-6-5-club-settings`
+
+##### Core Tasks:
+- [ ] Add club logo, owner, website fields to database
+- [ ] Create ownership transfer system with email verification
+- [ ] Build comprehensive club settings interface (General/Members/Ownership/Danger Zone)
+- [ ] Implement logo upload with auto-resize to 120x120
+- [ ] Add member management (add/remove/role changes)
+- [ ] Create password reset functionality for club users
+- [ ] Add soft delete capability for club admins
+- [ ] Build authorization system for club vs super admin access
+- [ ] Write comprehensive tests for all functionality
+
+**Completion Criteria**: Complete club settings management for both club admins and super admins
 
 ---
 
@@ -223,18 +242,18 @@ Mobile-first BMX race tracking web application evolving into a comprehensive BMX
 ---
 
 ## Current Status
-**Active Phase**: Phase 6.4 - Migration & Polish
-**Next Milestone**: Replace legacy authentication system and deploy
-**Current Branch**: phase-6-3-club-management (ready for PR)
+**Active Phase**: Phase 6.5 - Club Settings Management
+**Next Milestone**: Complete club settings management interface
+**Current Branch**: phase-6-4-migration-polish (ready to merge)
 **Production URL**: bmxtools.com
 
 ### Deployment Summary:
 - **Phases 1-5**: ✅ Complete and in production
-- **Phase 6.1-6.3**: ✅ Complete and ready for deployment
-- **Phase 6.4**: 🚧 Next phase (migration & polish)
-- **Test Coverage**: 100 tests passing (0 failures, 0 errors, 0 skips)
+- **Phase 6.1-6.4**: ✅ Complete and ready for deployment
+- **Phase 6.5**: 🚧 Next phase (club settings management)
+- **Test Coverage**: 99 tests passing (0 failures, 0 errors, 0 skips)
 - **Production Sites**: 5 Alberta BMX clubs active
 
 ---
 
-*Last Updated: 2025-08-12 - Beginning Phase 6 Platform Administration*
+*Last Updated: 2025-08-13 - Phase 6.4 Complete, Beginning Phase 6.5 Club Settings*
