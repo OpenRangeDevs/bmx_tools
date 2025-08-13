@@ -8,7 +8,6 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      session[:login_time] = Time.current.to_s
 
       # Role-based redirect
       if user.super_admin?
