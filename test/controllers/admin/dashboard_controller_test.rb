@@ -76,7 +76,7 @@ class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "nav a", text: "Dashboard"
     assert_select "nav a", text: "Clubs"
-    assert_select "nav a", text: "Settings"
+    assert_select "nav span", text: "Settings"
   end
 
   test "should display user info and logout link" do
