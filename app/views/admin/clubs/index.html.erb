@@ -24,8 +24,9 @@
           class: "px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md" %>
       <%= link_to "Clubs", admin_clubs_path,
           class: "px-3 py-2 text-sm font-medium text-orange-600 bg-orange-50 rounded-md" %>
-      <%= link_to "Settings", "#",
-          class: "px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md" %>
+      <span class="px-3 py-2 text-sm font-medium text-gray-400 rounded-md cursor-not-allowed">
+        Settings
+      </span>
     </nav>
   </div>
 
@@ -143,6 +144,8 @@
                     class: "text-orange-600 hover:text-orange-900" %>
                 <%= link_to "Edit", edit_admin_club_path(club),
                     class: "text-blue-600 hover:text-blue-900" %>
+                <%= link_to "Settings", admin_club_settings_path(club),
+                    class: "text-purple-600 hover:text-purple-900" %>
                 <% unless club.deleted? %>
                   <%= link_to "Delete", admin_club_path(club), method: :delete,
                       data: { confirm: "Are you sure you want to delete #{club.name}?" },

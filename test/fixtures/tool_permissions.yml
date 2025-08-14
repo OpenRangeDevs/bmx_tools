@@ -11,3 +11,9 @@ club_admin_permission:
   tool: 0  # race_management
   role: 1  # club_admin
   club: airdrie_bmx
+
+club_operator_permission:
+  user: club_operator
+  tool: 0  # race_management
+  role: 2  # club_operator
+  club: airdrie_bmx

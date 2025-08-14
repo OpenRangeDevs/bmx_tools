@@ -1,4 +1,6 @@
 class RacesController < ApplicationController
+  include RaceTimeHelper
+
   before_action :find_club_by_slug
   before_action :find_or_create_race
   before_action :require_club_admin!, only: [ :admin, :update, :update_settings, :create_new_race ]
@@ -113,7 +115,8 @@ class RacesController < ApplicationController
         permitted_params[:registration_deadline] = build_datetime_from_parts(
           permitted_params[:race_date],
           permitted_params[:registration_hour],
-          permitted_params[:registration_minute]
+          permitted_params[:registration_minute],
+          @club
         )
       end
 
@@ -121,7 +124,8 @@ class RacesController < ApplicationController
         permitted_params[:race_start_time] = build_datetime_from_parts(
           permitted_params[:race_date],
           permitted_params[:race_start_hour],
-          permitted_params[:race_start_minute]
+          permitted_params[:race_start_minute],
+          @club
         )
       end
     end
@@ -130,13 +134,6 @@ class RacesController < ApplicationController
     permitted_params.slice(:registration_deadline, :race_start_time)
   end
 
-  def build_datetime_from_parts(date, hour, minute)
-    return nil unless date.present? && hour.present? && minute.present?
-
-    # Parse in the club's timezone
-    time_string = "#{date} #{hour}:#{minute.to_s.rjust(2, '0')}"
-    @club.time_zone.parse(time_string)
-  end
 
   def require_club_admin!
     unless signed_in?

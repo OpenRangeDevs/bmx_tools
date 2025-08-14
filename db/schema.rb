@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_13_113616) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_13_131013) do
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "clubs", force: :cascade do |t|
     t.string "name"
     t.string "slug"
@@ -20,8 +48,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_13_113616) do
     t.datetime "deleted_at"
     t.string "location"
     t.string "contact_email"
+    t.bigint "owner_user_id"
+    t.string "website_url"
+    t.text "description"
     t.index ["deleted_at"], name: "index_clubs_on_deleted_at"
     t.index ["slug"], name: "index_clubs_on_slug", unique: true
+  end
+
+  create_table "ownership_transfers", force: :cascade do |t|
+    t.integer "club_id", null: false
+    t.integer "from_user_id", null: false
+    t.string "to_user_email", null: false
+    t.string "token", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "completed_at"
+    t.datetime "cancelled_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["club_id"], name: "index_ownership_transfers_on_club_id"
+    t.index ["from_user_id"], name: "index_ownership_transfers_on_from_user_id"
+    t.index ["token"], name: "index_ownership_transfers_on_token", unique: true
   end
 
   create_table "race_activities", force: :cascade do |t|
@@ -78,6 +124,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_13_113616) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "clubs", "users", column: "owner_user_id"
+  add_foreign_key "ownership_transfers", "clubs"
+  add_foreign_key "ownership_transfers", "users", column: "from_user_id"
   add_foreign_key "race_activities", "clubs"
   add_foreign_key "race_activities", "races"
   add_foreign_key "race_settings", "races"

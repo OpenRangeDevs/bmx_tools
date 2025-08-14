@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+pending_transfer:
+  club: airdrie_bmx
+  from_user: club_admin
+  to_user_email: "newowner@example.com"
+  token: "secure_token_123456789"
+  expires_at: <%= 48.hours.from_now %>
+  completed_at:
+  cancelled_at:
+
+completed_transfer:
+  club: calgary_bmx
+  from_user: super_admin
+  to_user_email: "previous@example.com"
+  token: "completed_token_987654321"
+  expires_at: <%= 24.hours.ago %>
+  completed_at: <%= 12.hours.ago %>
+  cancelled_at:

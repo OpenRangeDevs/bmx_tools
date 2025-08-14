@@ -16,7 +16,19 @@ Rails.application.routes.draw do
 
   # Platform Admin routes (super_admin only)
   namespace :admin do
-    resources :clubs
+    resources :clubs do
+      resource :settings, only: [ :show ], controller: "clubs/settings" do
+        patch :update_general
+        post :add_member
+        patch :update_member
+        delete :remove_member
+        post :initiate_transfer
+        delete :cancel_transfer
+        patch :soft_delete
+        patch :restore
+        delete :hard_delete
+      end
+    end
     root "dashboard#index"
     get "/dashboard", to: "dashboard#index"
   end
