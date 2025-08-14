@@ -11,16 +11,37 @@ end
 # Create Super Admin permission for race_management tool
 permission = ToolPermission.find_or_create_by(
   user: super_admin,
-  tool: 'race_management',
-  role: 'super_admin'
+  tool: :race_management,
+  role: :super_admin
 ) do |perm|
   perm.club = nil  # Super admin has no specific club
 end
 
 puts "✅ Created Super Admin: #{super_admin.email} (role: #{permission.role})"
 
-# Create Alberta BMX test data for development
-puts "Creating Alberta BMX test data..."
+# Create additional test users for Phase 6.5 testing
+puts "Creating test users for Phase 6.5 Club Settings..."
+
+# Club Admin User
+club_admin = User.find_or_create_by(email: 'calgary.admin@bmxtools.com') do |user|
+  user.password = 'roger123!'
+end
+
+# Club Operator User
+club_operator = User.find_or_create_by(email: 'airdrie.operator@bmxtools.com') do |user|
+  user.password = 'roger123!'
+end
+
+# Regular User (no admin permissions)
+regular_user = User.find_or_create_by(email: 'member@bmxtools.com') do |user|
+  user.password = 'roger123!'
+end
+
+puts "✅ Created test users: #{club_admin.email}, #{club_operator.email}, #{regular_user.email}"
+
+# Now create the clubs first so we can assign permissions
+puts "Creating Alberta BMX clubs first for permission assignments..."
+
 
 # Alberta BMX clubs (real club names)
 alberta_clubs = [
@@ -88,6 +109,36 @@ alberta_clubs.each do |club_data|
 
   notification_status = race_setting.notification_active? ? 'active' : 'inactive'
   puts "  ⚙️  Settings: race starts #{race_setting.race_start_time&.strftime('%H:%M')}, notifications #{notification_status}"
+end
+
+# Create tool permissions for test users now that clubs exist
+puts "Creating tool permissions for test users..."
+
+calgary_club = Club.find_by(slug: 'calgary-bmx')
+airdrie_club = Club.find_by(slug: 'airdrie-bmx')
+
+# Club Admin for Calgary BMX
+if calgary_club
+  calgary_admin_permission = ToolPermission.find_or_create_by(
+    user: club_admin,
+    tool: :race_management,
+    club: calgary_club
+  ) do |perm|
+    perm.role = :club_admin
+  end
+  puts "✅ Created club admin permission: #{club_admin.email} → #{calgary_club.name} (role: #{calgary_admin_permission.role})"
+end
+
+# Club Operator for Airdrie BMX
+if airdrie_club
+  airdrie_operator_permission = ToolPermission.find_or_create_by(
+    user: club_operator,
+    tool: :race_management,
+    club: airdrie_club
+  ) do |perm|
+    perm.role = :club_operator
+  end
+  puts "✅ Created club operator permission: #{club_operator.email} → #{airdrie_club.name} (role: #{airdrie_operator_permission.role})"
 end
 
 puts "\n🎯 Alberta BMX test data creation complete!"

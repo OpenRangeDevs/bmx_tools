@@ -15,7 +15,7 @@ class User < ApplicationRecord
   def admin_for?(club)
     tool_permissions.where(
       tool: "race_management",
-      role: [ "club_admin", "super_admin" ],
+      role: [ "club_admin", "club_operator", "super_admin" ],
       club: [ club, nil ]
     ).exists?
   end
@@ -43,10 +43,10 @@ class User < ApplicationRecord
     if super_admin?
       Club.all
     else
-      # Get clubs where user is admin or owner
+      # Get clubs where user is admin, operator, or owner
       admin_club_ids = tool_permissions.where(
         tool: "race_management",
-        role: "club_admin"
+        role: [ "club_admin", "club_operator" ]
       ).pluck(:club_id).compact
 
       owned_club_ids = owned_clubs.pluck(:id)

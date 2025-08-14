@@ -7,3 +7,11 @@ super_admin:
 club_admin:
   email: calgary.admin@bmxtools.com
   password_digest: <%= BCrypt::Password.create('roger123!') %>
+
+club_operator:
+  email: airdrie.operator@bmxtools.com
+  password_digest: <%= BCrypt::Password.create('roger123!') %>
+
+regular_user:
+  email: member@bmxtools.com
+  password_digest: <%= BCrypt::Password.create('roger123!') %>
