@@ -52,8 +52,8 @@ class OwnershipTransfer < ApplicationRecord
       # Mark transfer as completed
       update!(completed_at: Time.current)
 
-      # Send confirmation emails
-      OwnershipTransferMailer.transfer_completed(self).deliver_later
+      # TODO: Send confirmation emails
+      # OwnershipTransferMailer.transfer_completed(self).deliver_later
     end
 
     true
@@ -63,7 +63,8 @@ class OwnershipTransfer < ApplicationRecord
     return false unless pending?
 
     update!(cancelled_at: Time.current)
-    OwnershipTransferMailer.transfer_cancelled(self).deliver_later
+    # TODO: Send cancellation email notification
+    # OwnershipTransferMailer.transfer_cancelled(self).deliver_later
     true
   end
 

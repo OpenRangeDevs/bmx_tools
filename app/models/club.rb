@@ -72,7 +72,7 @@ class Club < ApplicationRecord
   end
 
   def has_logo?
-    logo.attached?
+    logo.attached? && logo.content_type.in?(%w[image/png image/jpg image/jpeg image/webp])
   end
 
   private

@@ -65,7 +65,7 @@
         </p>
       </div>
 
-      <%= form_with(model: [@club], url: admin_club_settings_update_general_path(@club), method: :patch, class: "space-y-6 p-6") do |form| %>
+      <%= form_with(model: [@club], url: update_general_admin_club_settings_path(@club), method: :patch, class: "space-y-6 p-6") do |form| %>
         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <!-- Club Logo -->
           <div class="sm:col-span-6">
@@ -146,7 +146,7 @@
         </div>
 
         <div class="flex justify-end">
-          <%= form.submit "Update Settings", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          <%= form.submit "Update General Settings", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
         </div>
       <% end %>
     </div>
@@ -166,7 +166,7 @@
         <!-- Add Member Form -->
         <div class="mb-8 p-4 bg-gray-50 rounded-lg">
           <h4 class="text-md font-medium text-gray-900 mb-4">Add New Member</h4>
-          <%= form_with url: admin_club_settings_add_member_path(@club), method: :post, class: "flex space-x-4" do |form| %>
+          <%= form_with url: add_member_admin_club_settings_path(@club), method: :post, class: "flex space-x-4" do |form| %>
             <div class="flex-1">
               <%= form.email_field :email, placeholder: "user@example.com", class: "block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" %>
             </div>
@@ -210,13 +210,13 @@
                   </div>
                   <div class="flex items-center space-x-2">
                     <% unless @club.owned_by?(member) %>
-                      <%= form_with url: admin_club_settings_update_member_path(@club), method: :patch, class: "flex items-center space-x-2" do |form| %>
+                      <%= form_with url: update_member_admin_club_settings_path(@club), method: :patch, class: "flex items-center space-x-2" do |form| %>
                         <%= form.hidden_field :user_id, value: member.id %>
                         <%= form.select :role, [["Club Admin", "club_admin"], ["Club Operator", "club_operator"]],
                                         { selected: permission.role },
                                         { class: "text-sm border-gray-300 rounded-md", onchange: "this.form.submit()" } %>
                       <% end %>
-                      <%= form_with url: admin_club_settings_remove_member_path(@club), method: :delete, confirm: "Are you sure you want to remove #{member.email} from this club?", class: "ml-2" do |form| %>
+                      <%= form_with url: remove_member_admin_club_settings_path(@club), method: :delete, confirm: "Are you sure you want to remove #{member.email} from this club?", class: "ml-2" do |form| %>
                         <%= form.hidden_field :user_id, value: member.id %>
                         <%= form.submit "Remove", class: "text-sm text-red-600 hover:text-red-900" %>
                       <% end %>
@@ -284,7 +284,7 @@
                     <p>Initiated by: <%= @pending_transfer.from_user.email %></p>
                   </div>
                   <div class="mt-4">
-                    <%= form_with url: admin_club_settings_cancel_transfer_path(@club), method: :delete, confirm: "Are you sure you want to cancel this transfer?" do |form| %>
+                    <%= form_with url: cancel_transfer_admin_club_settings_path(@club), method: :delete, confirm: "Are you sure you want to cancel this transfer?" do |form| %>
                       <%= form.submit "Cancel Transfer", class: "text-sm bg-white border border-yellow-300 text-yellow-700 hover:bg-yellow-50 px-3 py-1 rounded-md" %>
                     <% end %>
                   </div>
@@ -298,7 +298,7 @@
               <p class="text-sm text-gray-600 mb-4">
                 Transfer ownership to another user. They will receive an email to accept the transfer.
               </p>
-              <%= form_with url: admin_club_settings_initiate_transfer_path(@club), method: :post, class: "flex space-x-4" do |form| %>
+              <%= form_with url: initiate_transfer_admin_club_settings_path(@club), method: :post, class: "flex space-x-4" do |form| %>
                 <div class="flex-1">
                   <%= form.email_field :to_user_email, placeholder: "newowner@example.com", class: "block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" %>
                 </div>
@@ -339,7 +339,7 @@
                   <p>This will hide the club from public view and prevent race management. Can be restored by platform administrators.</p>
                 </div>
                 <div class="mt-4">
-                  <%= form_with url: admin_club_settings_soft_delete_path(@club), method: :patch, confirm: "Are you sure you want to delete '#{@club.name}'? This will stop all race tracking and hide the club." do |form| %>
+                  <%= form_with url: soft_delete_admin_club_settings_path(@club), method: :patch, confirm: "Are you sure you want to delete '#{@club.name}'? This will stop all race tracking and hide the club." do |form| %>
                     <%= form.submit "Delete Club", class: "bg-red-600 border border-transparent rounded-md py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-red-700" %>
                   <% end %>
                 </div>
@@ -362,7 +362,7 @@
                     <p>This club has been deleted. Restore it to make it active again.</p>
                   </div>
                   <div class="mt-4">
-                    <%= form_with url: admin_club_settings_restore_path(@club), method: :patch, confirm: "Are you sure you want to restore '#{@club.name}'?" do |form| %>
+                    <%= form_with url: restore_admin_club_settings_path(@club), method: :patch, confirm: "Are you sure you want to restore '#{@club.name}'?" do |form| %>
                       <%= form.submit "Restore Club", class: "bg-green-600 border border-transparent rounded-md py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-green-700" %>
                     <% end %>
                   </div>
@@ -387,7 +387,7 @@
                   <p><strong>Warning:</strong> This action cannot be undone. All club data, races, and history will be permanently deleted.</p>
                 </div>
                 <div class="mt-4">
-                  <%= form_with url: admin_club_settings_hard_delete_path(@club), method: :delete, confirm: "WARNING: This will PERMANENTLY DELETE '#{@club.name}' and ALL associated data. This cannot be undone. Type the club name to confirm." do |form| %>
+                  <%= form_with url: hard_delete_admin_club_settings_path(@club), method: :delete, confirm: "WARNING: This will PERMANENTLY DELETE '#{@club.name}' and ALL associated data. This cannot be undone. Type the club name to confirm." do |form| %>
                     <%= form.submit "PERMANENTLY DELETE", class: "bg-red-700 border border-red-800 rounded-md py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-red-800" %>
                   <% end %>
                 </div>
