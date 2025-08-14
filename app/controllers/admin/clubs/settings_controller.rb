@@ -182,7 +182,7 @@ class Admin::Clubs::SettingsController < ApplicationController
   private
 
   def set_club
-    @club = Club.unscoped.find_by!(slug: params[:club_slug])
+    @club = Club.unscoped.find_by!(slug: params[:club_id])
   end
 
   def authorize_club_access!
